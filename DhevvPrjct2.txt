@@ -1,0 +1,269 @@
+local Players = game:GetService("Players")
+local LP = Players.LocalPlayer
+local UI = game:GetService("UserInputService")
+local CG = game:GetService("CoreGui")
+
+-- EXECUTOR CHAT UI (New - Separate from Roblox)
+local ExecutorSG = Instance.new("ScreenGui")
+ExecutorSG.Name = "ExecutorChatSystem"
+ExecutorSG.ResetOnSpawn = false
+ExecutorSG.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ExecutorSG.Parent = CG
+
+-- Main Window (Hidden by default)
+local ExecutorWindow = Instance.new("Frame")
+ExecutorWindow.Name = "ExecutorChatWindow"
+ExecutorWindow.Size = UDim2.new(0.3, 0, 0.45, 0)
+ExecutorWindow.Position = UDim2.new(0.65, 0, 0.3, 0)
+ExecutorWindow.BackgroundColor3 = Color3.fromRGB(15, 20, 30)
+ExecutorWindow.BackgroundTransparency = 0.1
+ExecutorWindow.BorderColor3 = Color3.fromRGB(0, 150, 255)
+ExecutorWindow.BorderSizePixel = 2
+ExecutorWindow.Visible = false
+ExecutorWindow.Parent = ExecutorSG
+
+-- Header
+local ExecutorHeader = Instance.new("Frame")
+ExecutorHeader.Name = "Header"
+ExecutorHeader.Size = UDim2.new(1, 0, 0.08, 0)
+ExecutorHeader.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
+ExecutorHeader.BorderSizePixel = 0
+ExecutorHeader.Parent = ExecutorWindow
+
+local ExecutorTitle = Instance.new("TextLabel")
+ExecutorTitle.Name = "Title"
+ExecutorTitle.Size = UDim2.new(0.7, 0, 1, 0)
+ExecutorTitle.BackgroundTransparency = 1
+ExecutorTitle.Text = "EXECUTOR CHAT"
+ExecutorTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExecutorTitle.Font = Enum.Font.SourceSansBold
+ExecutorTitle.TextSize = 16
+ExecutorTitle.Parent = ExecutorHeader
+
+local ExecutorClose = Instance.new("TextButton")
+ExecutorClose.Name = "CloseButton"
+ExecutorClose.Size = UDim2.new(0.3, 0, 1, 0)
+ExecutorClose.Position = UDim2.new(0.7, 0, 0, 0)
+ExecutorClose.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
+ExecutorClose.Text = "CLOSE"
+ExecutorClose.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExecutorClose.Font = Enum.Font.SourceSansBold
+ExecutorClose.TextSize = 14
+ExecutorClose.Parent = ExecutorHeader
+
+-- Chat Display
+local ExecutorChatScroll = Instance.new("ScrollingFrame")
+ExecutorChatScroll.Name = "ChatScroll"
+ExecutorChatScroll.Size = UDim2.new(1, 0, 0.77, 0)
+ExecutorChatScroll.Position = UDim2.new(0, 0, 0.08, 0)
+ExecutorChatScroll.BackgroundTransparency = 1
+ExecutorChatScroll.ScrollBarThickness = 5
+ExecutorChatScroll.ScrollBarImageColor3 = Color3.fromRGB(0, 150, 255)
+ExecutorChatScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+ExecutorChatScroll.Parent = ExecutorWindow
+
+local ExecutorChatLayout = Instance.new("UIListLayout")
+ExecutorChatLayout.Name = "ChatLayout"
+ExecutorChatLayout.Padding = UDim.new(0, 5)
+ExecutorChatLayout.Parent = ExecutorChatScroll
+
+local ExecutorChatPadding = Instance.new("UIPadding")
+ExecutorChatPadding.Name = "ChatPadding"
+ExecutorChatPadding.PaddingLeft = UDim.new(0, 5)
+ExecutorChatPadding.PaddingRight = UDim.new(0, 5)
+ExecutorChatPadding.PaddingTop = UDim.new(0, 5)
+ExecutorChatPadding.Parent = ExecutorChatScroll
+
+-- Input Area
+local ExecutorInputArea = Instance.new("Frame")
+ExecutorInputArea.Name = "InputArea"
+ExecutorInputArea.Size = UDim2.new(1, 0, 0.15, 0)
+ExecutorInputArea.Position = UDim2.new(0, 0, 0.85, 0)
+ExecutorInputArea.BackgroundColor3 = Color3.fromRGB(25, 30, 40)
+ExecutorInputArea.BorderSizePixel = 0
+ExecutorInputArea.Parent = ExecutorWindow
+
+local ExecutorInputBox = Instance.new("TextBox")
+ExecutorInputBox.Name = "InputBox"
+ExecutorInputBox.Size = UDim2.new(0.7, 0, 0.7, 0)
+ExecutorInputBox.Position = UDim2.new(0.02, 0, 0.15, 0)
+ExecutorInputBox.BackgroundColor3 = Color3.fromRGB(35, 40, 50)
+ExecutorInputBox.BorderColor3 = Color3.fromRGB(0, 150, 255)
+ExecutorInputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExecutorInputBox.Font = Enum.Font.Code
+ExecutorInputBox.PlaceholderText = "Executor chat message..."
+ExecutorInputBox.ClearTextOnFocus = false
+ExecutorInputBox.TextSize = 14
+ExecutorInputBox.Parent = ExecutorInputArea
+
+local ExecutorSendBtn = Instance.new("TextButton")
+ExecutorSendBtn.Name = "SendButton"
+ExecutorSendBtn.Size = UDim2.new(0.25, 0, 0.7, 0)
+ExecutorSendBtn.Position = UDim2.new(0.73, 0, 0.15, 0)
+ExecutorSendBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
+ExecutorSendBtn.Text = "SEND"
+ExecutorSendBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExecutorSendBtn.Font = Enum.Font.SourceSansBold
+ExecutorSendBtn.TextSize = 14
+ExecutorSendBtn.Parent = ExecutorInputArea
+
+-- Toggle Button (Always Visible)
+local ExecutorToggleBtn = Instance.new("TextButton")
+ExecutorToggleBtn.Name = "ToggleButton"
+ExecutorToggleBtn.Size = UDim2.new(0, 50, 0, 50)
+ExecutorToggleBtn.Position = UDim2.new(0.92, 0, 0.85, 0)
+ExecutorToggleBtn.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
+ExecutorToggleBtn.BackgroundTransparency = 0.3
+ExecutorToggleBtn.Text = "EC"
+ExecutorToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ExecutorToggleBtn.TextSize = 18
+ExecutorToggleBtn.Font = Enum.Font.SourceSansBold
+ExecutorToggleBtn.Parent = ExecutorSG
+
+-- Function to add message to executor chat
+local function AddExecutorMessage(sender, message, isSystem)
+    local msgFrame = Instance.new("Frame")
+    msgFrame.Name = "MsgFrame"
+    msgFrame.Size = UDim2.new(1, -10, 0, 0)
+    msgFrame.BackgroundTransparency = 1
+    msgFrame.AutomaticSize = Enum.AutomaticSize.Y
+    
+    local senderLabel = Instance.new("TextLabel")
+    senderLabel.Name = "Sender"
+    senderLabel.Size = UDim2.new(1, 0, 0, 18)
+    senderLabel.BackgroundTransparency = 1
+    senderLabel.Text = (isSystem and "[SYS] " or "["..sender.."]")
+    senderLabel.TextColor3 = isSystem and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(0, 200, 255)
+    senderLabel.Font = Enum.Font.Code
+    senderLabel.TextSize = 13
+    senderLabel.TextXAlignment = Enum.TextXAlignment.Left
+    senderLabel.Parent = msgFrame
+    
+    local msgLabel = Instance.new("TextLabel")
+    msgLabel.Name = "Message"
+    msgLabel.Size = UDim2.new(1, 0, 0, 0)
+    msgLabel.Position = UDim2.new(0, 0, 0, 18)
+    msgLabel.BackgroundTransparency = 1
+    msgLabel.Text = message
+    msgLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    msgLabel.Font = Enum.Font.Code
+    msgLabel.TextSize = 14
+    msgLabel.TextWrapped = true
+    msgLabel.AutomaticSize = Enum.AutomaticSize.Y
+    msgLabel.TextXAlignment = Enum.TextXAlignment.Left
+    msgLabel.Parent = msgFrame
+    
+    msgFrame.Parent = ExecutorChatScroll
+    
+    task.wait()
+    ExecutorChatScroll.CanvasPosition = Vector2.new(0, ExecutorChatScroll.AbsoluteCanvasSize.Y)
+end
+
+-- Function to send executor message
+local function SendExecutorMessage()
+    local text = string.gsub(ExecutorInputBox.Text, "^%s*(.-)%s*$", "%1")
+    if text ~= "" then
+        AddExecutorMessage(LP.Name, text, false)
+        ExecutorInputBox.Text = ""
+        
+        -- Simulate receiving messages from other "executor users"
+        -- In real implementation, this would need network communication
+    end
+end
+
+-- Connect events for executor chat
+ExecutorToggleBtn.MouseButton1Click:Connect(function()
+    ExecutorWindow.Visible = not ExecutorWindow.Visible
+    if ExecutorWindow.Visible then
+        ExecutorInputBox:CaptureFocus()
+    end
+end)
+
+ExecutorClose.MouseButton1Click:Connect(function()
+    ExecutorWindow.Visible = false
+end)
+
+ExecutorSendBtn.MouseButton1Click:Connect(SendExecutorMessage)
+
+ExecutorInputBox.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        SendExecutorMessage()
+    end
+end)
+
+-- Hotkey for executor chat (F10)
+UI.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.F10 then
+        ExecutorWindow.Visible = not ExecutorWindow.Visible
+        if ExecutorWindow.Visible then
+            ExecutorInputBox:CaptureFocus()
+        end
+    end
+end)
+
+-- Initial messages for executor chat
+AddExecutorMessage("SYSTEM", "Executor Chat System Loaded", true)
+AddExecutorMessage("SYSTEM", "This chat is SEPARATE from Roblox chat", true)
+AddExecutorMessage("SYSTEM", "Only users with this script can see this", true)
+AddExecutorMessage("SYSTEM", "Press F10 or click EC button", true)
+
+-- Make executor window draggable
+local draggingExecutor = false
+local executorDragInput, executorStartPos, executorStartDragPos
+
+ExecutorHeader.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        draggingExecutor = true
+        executorStartDragPos = input.Position
+        executorStartPos = ExecutorWindow.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                draggingExecutor = false
+            end
+        end)
+    end
+end)
+
+ExecutorHeader.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        executorDragInput = input
+    end
+end)
+
+UI.InputChanged:Connect(function(input)
+    if draggingExecutor and input == executorDragInput then
+        local delta = input.Position - executorStartDragPos
+        ExecutorWindow.Position = UDim2.new(
+            executorStartPos.X.Scale,
+            executorStartPos.X.Offset + delta.X,
+            executorStartPos.Y.Scale,
+            executorStartPos.Y.Offset + delta.Y
+        )
+    end
+end)
+
+-- ROBLOX ORIGINAL CHAT REMAINS UNTOUCHED
+-- This script doesn't modify or interfere with the original Roblox chat system
+-- Users can use both chats simultaneously:
+-- 1. Roblox original chat (for normal players)
+-- 2. Executor chat (for script users only)
+
+AddExecutorMessage("SYSTEM", "Roblox original chat is still available", true)
+AddExecutorMessage("SYSTEM", "Use both chats independently", true)
+
+-- Network simulation placeholder
+-- In a real implementation, you would need to add network communication
+-- between users who have executed this script
+local function SimulateNetwork()
+    -- Placeholder for actual network implementation
+    -- This would require remote events or custom networking
+end
+
+-- Keep both UIs active
+ExecutorWindow.Visible = false  -- Hidden by default
+ExecutorToggleBtn.Visible = true  -- Toggle button always visible
+
+print("Dual Chat System Loaded:")
+print("- Roblox Chat: Original (untouched)")
+print("- Executor Chat: Press F10 or click EC button")
