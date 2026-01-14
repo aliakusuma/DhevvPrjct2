@@ -1,343 +1,281 @@
--- HYPERION CHAT - REAL WORKING CHAT FOR EXECUTORS
 local Players = game:GetService("Players")
-local LP = Players.LocalPlayer
-local UI = game:GetService("UserInputService")
-local CG = game:GetService("CoreGui")
-local RS = game:GetService("ReplicatedStorage")
-local HS = game:GetService("HttpService")
+local player = Players.LocalPlayer
+local UserInput = game:GetService("UserInputService")
+local CoreGui = game:GetService("CoreGui")
 
--- UNIQUE CHAT ID (gunakan LP.UserId untuk unique)
-local CHAT_ID = "EXEC_CHAT_" .. tostring(LP.UserId)
-local CHAT_CHANNEL = "GLOBAL_EXEC_CHAT"
-
--- SIMPAN PESAN GLOBAL (sementara)
-_G.ExecutorChatMessages = _G.ExecutorChatMessages or {}
-_G.ExecutorChatUsers = _G.ExecutorChatUsers or {}
-
--- HAPUS UI LAMA
-if CG:FindFirstChild("HyperionChat") then
-    CG:FindFirstChild("HyperionChat"):Destroy()
+-- Hapus UI lama jika ada
+if CoreGui:FindFirstChild("RealChatUI") then
+    CoreGui:FindFirstChild("RealChatUI"):Destroy()
 end
 
--- CREATE SCREENGUI
-local SG = Instance.new("ScreenGui")
-SG.Name = "HyperionChat"
-SG.ResetOnSpawn = false
-SG.DisplayOrder = 999
-SG.Parent = CG
+-- =======================
+-- BUAT UI
+-- =======================
 
--- MINIMIZED BUTTON (Always Visible)
-local MinBtn = Instance.new("TextButton")
-MinBtn.Name = "MinimizedButton"
-MinBtn.Size = UDim2.new(0, 60, 0, 60)
-MinBtn.Position = UDim2.new(0.93, 0, 0.85, 0)
-MinBtn.BackgroundColor3 = Color3.fromRGB(40, 120, 240)
-MinBtn.BackgroundTransparency = 0.2
-MinBtn.Text = "💬"
-MinBtn.TextColor3 = Color3.white
-MinBtn.TextSize = 28
-MinBtn.Font = Enum.Font.SourceSansBold
-MinBtn.Parent = SG
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "RealChatUI"
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = CoreGui
 
--- CHAT WINDOW
-local Window = Instance.new("Frame")
-Window.Name = "ChatWindow"
-Window.Size = UDim2.new(0.4, 0, 0.55, 0)
-Window.Position = UDim2.new(0.58, 0, 0.22, 0)
-Window.BackgroundColor3 = Color3.fromRGB(15, 20, 30)
-Window.BorderSizePixel = 0
-Window.Visible = false
-Window.Parent = SG
+-- Tombol toggle (selalu terlihat)
+local toggleButton = Instance.new("TextButton")
+toggleButton.Name = "ToggleButton"
+toggleButton.Size = UDim2.new(0, 60, 0, 60)
+toggleButton.Position = UDim2.new(0.94, 0, 0.87, 0)
+toggleButton.BackgroundColor3 = Color3.fromRGB(0, 100, 255)
+toggleButton.Text = "💬"
+toggleButton.TextColor3 = Color3.white
+toggleButton.TextSize = 28
+toggleButton.Font = Enum.Font.SourceSansBold
+toggleButton.Parent = screenGui
 
--- TITLE BAR
-local TitleBar = Instance.new("Frame")
-TitleBar.Size = UDim2.new(1, 0, 0.07, 0)
-TitleBar.BackgroundColor3 = Color3.fromRGB(30, 100, 200)
-TitleBar.Parent = Window
+-- Window chat (awalnya tersembunyi)
+local chatWindow = Instance.new("Frame")
+chatWindow.Name = "ChatWindow"
+chatWindow.Size = UDim2.new(0.35, 0, 0.5, 0)
+chatWindow.Position = UDim2.new(0.6, 0, 0.25, 0)
+chatWindow.BackgroundColor3 = Color3.fromRGB(30, 35, 45)
+chatWindow.BorderSizePixel = 0
+chatWindow.Visible = false
+chatWindow.Parent = screenGui
 
-local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(0.6, 0, 1, 0)
-Title.BackgroundTransparency = 1
-Title.Text = "💬 EXECUTORS CHAT"
-Title.TextColor3 = Color3.white
-Title.Font = Enum.Font.SourceSansBold
-Title.TextSize = 16
-Title.Parent = TitleBar
+-- Header window
+local header = Instance.new("Frame")
+header.Size = UDim2.new(1, 0, 0.08, 0)
+header.BackgroundColor3 = Color3.fromRGB(0, 80, 200)
+header.Parent = chatWindow
 
-local OnlineCount = Instance.new("TextLabel")
-OnlineCount.Size = UDim2.new(0.3, 0, 1, 0)
-OnlineCount.Position = UDim2.new(0.6, 0, 0, 0)
-OnlineCount.BackgroundTransparency = 1
-OnlineCount.Text = "Online: 1"
-OnlineCount.TextColor3 = Color3.fromRGB(100, 255, 100)
-OnlineCount.Font = Enum.Font.Code
-OnlineCount.TextSize = 14
-OnlineCount.Parent = TitleBar
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(0.7, 0, 1, 0)
+title.BackgroundTransparency = 1
+title.Text = "EXECUTOR CHAT"
+title.TextColor3 = Color3.white
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 16
+title.Parent = header
 
-local CloseBtn = Instance.new("TextButton")
-CloseBtn.Size = UDim2.new(0.1, 0, 1, 0)
-CloseBtn.Position = UDim2.new(0.9, 0, 0, 0)
-CloseBtn.Text = "✕"
-CloseBtn.TextColor3 = Color3.white
-CloseBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
-CloseBtn.Font = Enum.Font.SourceSansBold
-CloseBtn.Parent = TitleBar
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0.3, 0, 1, 0)
+closeButton.Position = UDim2.new(0.7, 0, 0, 0)
+closeButton.Text = "CLOSE"
+closeButton.TextColor3 = Color3.white
+closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closeButton.Font = Enum.Font.SourceSansBold
+closeButton.Parent = header
 
--- MESSAGES CONTAINER
-local MessagesFrame = Instance.new("ScrollingFrame")
-MessagesFrame.Size = UDim2.new(1, 0, 0.78, 0)
-MessagesFrame.Position = UDim2.new(0, 0, 0.07, 0)
-MessagesFrame.BackgroundColor3 = Color3.fromRGB(10, 15, 25)
-MessagesFrame.ScrollBarThickness = 6
-MessagesFrame.ScrollBarImageColor3 = Color3.fromRGB(40, 120, 240)
-MessagesFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-MessagesFrame.Parent = Window
+-- Area pesan
+local messagesFrame = Instance.new("ScrollingFrame")
+messagesFrame.Size = UDim2.new(1, 0, 0.77, 0)
+messagesFrame.Position = UDim2.new(0, 0, 0.08, 0)
+messagesFrame.BackgroundColor3 = Color3.fromRGB(20, 25, 35)
+messagesFrame.ScrollBarThickness = 6
+messagesFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+messagesFrame.Parent = chatWindow
 
-local MsgLayout = Instance.new("UIListLayout")
-MsgLayout.Padding = UDim.new(0, 8)
-MsgLayout.Parent = MessagesFrame
+local messagesLayout = Instance.new("UIListLayout")
+messagesLayout.Padding = UDim.new(0, 10)
+messagesLayout.Parent = messagesFrame
 
-local MsgPadding = Instance.new("UIPadding")
-MsgPadding.PaddingLeft = UDim.new(0, 10)
-MsgPadding.PaddingRight = UDim.new(0, 10)
-MsgPadding.PaddingTop = UDim.new(0, 10)
-MsgPadding.Parent = MessagesFrame
+local messagesPadding = Instance.new("UIPadding")
+messagesPadding.PaddingLeft = UDim.new(0, 10)
+messagesPadding.PaddingRight = UDim.new(0, 10)
+messagesPadding.PaddingTop = UDim.new(0, 10)
+messagesPadding.Parent = messagesFrame
 
--- INPUT AREA
-local InputFrame = Instance.new("Frame")
-InputFrame.Size = UDim2.new(1, 0, 0.15, 0)
-InputFrame.Position = UDim2.new(0, 0, 0.85, 0)
-InputFrame.BackgroundColor3 = Color3.fromRGB(25, 30, 45)
-InputFrame.Parent = Window
+-- Area input
+local inputFrame = Instance.new("Frame")
+inputFrame.Size = UDim2.new(1, 0, 0.15, 0)
+inputFrame.Position = UDim2.new(0, 0, 0.85, 0)
+inputFrame.BackgroundColor3 = Color3.fromRGB(40, 45, 55)
+inputFrame.Parent = chatWindow
 
-local InputBox = Instance.new("TextBox")
-InputBox.Size = UDim2.new(0.7, 0, 0.7, 0)
-InputBox.Position = UDim2.new(0.02, 0, 0.15, 0)
-InputBox.BackgroundColor3 = Color3.fromRGB(35, 40, 60)
-InputBox.BorderSizePixel = 0
-InputBox.TextColor3 = Color3.white
-InputBox.Font = Enum.Font.SourceSans
-InputBox.PlaceholderText = "Type message (visible to all executors)..."
-InputBox.TextSize = 14
-InputBox.Parent = InputFrame
+local inputBox = Instance.new("TextBox")
+inputBox.Size = UDim2.new(0.7, 0, 0.7, 0)
+inputBox.Position = UDim2.new(0.02, 0, 0.15, 0)
+inputBox.BackgroundColor3 = Color3.fromRGB(50, 55, 65)
+inputBox.BorderSizePixel = 0
+inputBox.TextColor3 = Color3.white
+inputBox.Font = Enum.Font.SourceSans
+inputBox.PlaceholderText = "Type your message here..."
+inputBox.TextSize = 14
+inputBox.Parent = inputFrame
 
-local SendBtn = Instance.new("TextButton")
-SendBtn.Size = UDim2.new(0.25, 0, 0.7, 0)
-SendBtn.Position = UDim2.new(0.73, 0, 0.15, 0)
-SendBtn.Text = "SEND"
-SendBtn.TextColor3 = Color3.white
-SendBtn.BackgroundColor3 = Color3.fromRGB(40, 120, 240)
-SendBtn.Font = Enum.Font.SourceSansBold
-SendBtn.TextSize = 14
-SendBtn.Parent = InputFrame
+local sendButton = Instance.new("TextButton")
+sendButton.Size = UDim2.new(0.25, 0, 0.7, 0)
+sendButton.Position = UDim2.new(0.73, 0, 0.15, 0)
+sendButton.Text = "SEND"
+sendButton.TextColor3 = Color3.white
+sendButton.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
+sendButton.Font = Enum.Font.SourceSansBold
+sendButton.Parent = inputFrame
 
--- GLOBAL MESSAGE STORAGE SYSTEM
-_G.ExecutorChatData = _G.ExecutorChatData or {
-    Messages = {},
-    Users = {}
-}
+-- =======================
+-- VARIABEL & FUNGSI
+-- =======================
 
--- REGISTER CURRENT USER
-_G.ExecutorChatData.Users[LP.UserId] = {
-    Name = LP.Name,
-    JoinTime = os.time()
-}
+local chatMessages = {}
+local messageCount = 0
 
--- FUNCTION TO ADD MESSAGE
-local function AddGlobalMessage(sender, message, isSystem)
-    local msgId = #_G.ExecutorChatData.Messages + 1
-    local timestamp = os.time()
+-- Fungsi tambah pesan
+function addMessage(senderName, messageText, isSystemMessage)
+    messageCount = messageCount + 1
     
-    _G.ExecutorChatData.Messages[msgId] = {
-        Sender = sender,
-        Message = message,
-        Time = timestamp,
-        System = isSystem,
-        SenderId = isSystem and 0 or LP.UserId
-    }
+    -- Buat frame pesan
+    local messageFrame = Instance.new("Frame")
+    messageFrame.Name = "Message" .. messageCount
+    messageFrame.Size = UDim2.new(1, -20, 0, 0)
+    messageFrame.BackgroundTransparency = 1
+    messageFrame.AutomaticSize = Enum.AutomaticSize.Y
     
-    -- Update display
-    local MsgContainer = Instance.new("Frame")
-    MsgContainer.Size = UDim2.new(1, -20, 0, 0)
-    MsgContainer.BackgroundTransparency = 1
-    MsgContainer.AutomaticSize = Enum.AutomaticSize.Y
+    -- Label pengirim
+    local senderLabel = Instance.new("TextLabel")
+    senderLabel.Size = UDim2.new(1, 0, 0, 20)
+    senderLabel.BackgroundTransparency = 1
+    senderLabel.Text = isSystemMessage and "[SYSTEM] " .. senderName or "[" .. senderName .. "]"
+    senderLabel.TextColor3 = isSystemMessage and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(100, 200, 255)
+    senderLabel.Font = Enum.Font.SourceSansBold
+    senderLabel.TextSize = 14
+    senderLabel.TextXAlignment = Enum.TextXAlignment.Left
+    senderLabel.Parent = messageFrame
     
-    local Header = Instance.new("Frame")
-    Header.Size = UDim2.new(1, 0, 0, 20)
-    Header.BackgroundTransparency = 1
-    Header.Parent = MsgContainer
+    -- Label pesan
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Size = UDim2.new(1, 0, 0, 0)
+    textLabel.Position = UDim2.new(0, 0, 0, 20)
+    textLabel.BackgroundTransparency = 1
+    textLabel.Text = messageText
+    textLabel.TextColor3 = Color3.white
+    textLabel.Font = Enum.Font.SourceSans
+    textLabel.TextSize = 14
+    textLabel.TextWrapped = true
+    textLabel.AutomaticSize = Enum.AutomaticSize.Y
+    textLabel.TextXAlignment = Enum.TextXAlignment.Left
+    textLabel.Parent = messageFrame
     
-    local SenderText = Instance.new("TextLabel")
-    SenderText.Size = UDim2.new(0.7, 0, 1, 0)
-    SenderText.BackgroundTransparency = 1
-    SenderText.Text = isSystem and "⚡ " .. sender or "👤 " .. sender
-    SenderText.TextColor3 = isSystem and Color3.fromRGB(255, 150, 50) or Color3.fromRGB(100, 200, 255)
-    SenderText.Font = Enum.Font.SourceSansBold
-    SenderText.TextSize = 14
-    SenderText.TextXAlignment = Enum.TextXAlignment.Left
-    SenderText.Parent = Header
+    -- Tambah ke frame
+    messageFrame.Parent = messagesFrame
     
-    local TimeText = Instance.new("TextLabel")
-    TimeText.Size = UDim2.new(0.3, 0, 1, 0)
-    TimeText.Position = UDim2.new(0.7, 0, 0, 0)
-    TimeText.BackgroundTransparency = 1
-    TimeText.Text = os.date("%H:%M")
-    TimeText.TextColor3 = Color3.fromRGB(150, 150, 150)
-    TimeText.Font = Enum.Font.Code
-    TimeText.TextSize = 12
-    TimeText.TextXAlignment = Enum.TextXAlignment.Right
-    TimeText.Parent = Header
+    -- Scroll ke bawah
+    wait(0.05)
+    messagesFrame.CanvasPosition = Vector2.new(0, messagesFrame.AbsoluteCanvasSize.Y)
     
-    local MessageText = Instance.new("TextLabel")
-    MessageText.Size = UDim2.new(1, 0, 0, 0)
-    MessageText.Position = UDim2.new(0, 0, 0, 20)
-    MessageText.BackgroundTransparency = 1
-    MessageText.Text = message
-    MessageText.TextColor3 = Color3.white
-    MessageText.Font = Enum.Font.SourceSans
-    MessageText.TextSize = 14
-    MessageText.TextWrapped = true
-    MessageText.AutomaticSize = Enum.AutomaticSize.Y
-    MessageText.TextXAlignment = Enum.TextXAlignment.Left
-    MessageText.Parent = MsgContainer
-    
-    MsgContainer.Parent = MessagesFrame
-    
-    -- Auto scroll
-    task.wait(0.05)
-    MessagesFrame.CanvasPosition = Vector2.new(0, MessagesFrame.AbsoluteCanvasSize.Y)
-    
-    -- Print to output
-    print("[Executor Chat] " .. sender .. ": " .. message)
-end
-
--- FUNCTION TO SEND MESSAGE
-local function SendGlobalMessage()
-    local text = string.gsub(InputBox.Text, "^%s*(.-)%s*$", "%1")
-    if text == "" then return end
-    
-    -- Add to global storage
-    AddGlobalMessage(LP.Name, text, false)
-    
-    -- Clear input
-    InputBox.Text = ""
-    InputBox:CaptureFocus()
-    
-    -- Also store in player's chat history
-    local playerMsgs = _G.ExecutorChatData[LP.UserId] or {}
-    table.insert(playerMsgs, {
-        Text = text,
-        Time = os.time()
+    -- Simpan pesan
+    table.insert(chatMessages, {
+        sender = senderName,
+        message = messageText,
+        time = os.time()
     })
-    _G.ExecutorChatData[LP.UserId] = playerMsgs
+    
+    -- Print ke console
+    print("[Executor Chat] " .. senderName .. ": " .. messageText)
 end
 
--- FUNCTION TO CHECK OTHER EXECUTORS
-local function UpdateOnlineUsers()
-    local count = 0
-    for _, _ in pairs(_G.ExecutorChatData.Users or {}) do
-        count = count + 1
+-- Fungsi kirim pesan
+function sendMessage()
+    local text = string.gsub(inputBox.Text, "^%s*(.-)%s*$", "%1")
+    
+    if text ~= "" and text ~= " " then
+        addMessage(player.Name, text, false)
+        inputBox.Text = ""
+        inputBox:CaptureFocus()
     end
-    OnlineCount.Text = "Online: " .. count
 end
 
+-- =======================
 -- EVENT HANDLERS
-MinBtn.MouseButton1Click:Connect(function()
-    Window.Visible = not Window.Visible
-    if Window.Visible then
-        InputBox:CaptureFocus()
-        UpdateOnlineUsers()
+-- =======================
+
+-- Toggle window
+toggleButton.MouseButton1Click:Connect(function()
+    chatWindow.Visible = not chatWindow.Visible
+    if chatWindow.Visible then
+        inputBox:CaptureFocus()
     end
 end)
 
-CloseBtn.MouseButton1Click:Connect(function()
-    Window.Visible = false
+-- Close window
+closeButton.MouseButton1Click:Connect(function()
+    chatWindow.Visible = false
 end)
 
-SendBtn.MouseButton1Click:Connect(SendGlobalMessage)
+-- Kirim pesan saat tombol send
+sendButton.MouseButton1Click:Connect(function()
+    sendMessage()
+end)
 
-InputBox.FocusLost:Connect(function(enterPressed)
-    if enterPressed and UI:IsKeyDown(Enum.KeyCode.Return) then
-        SendGlobalMessage()
+-- Kirim pesan saat enter
+inputBox.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        sendMessage()
     end
 end)
 
--- HOTKEY (F8)
-UI.InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.F8 then
-        Window.Visible = not Window.Visible
-        if Window.Visible then
-            InputBox:CaptureFocus()
-            UpdateOnlineUsers()
+-- Hotkey F9
+UserInput.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.F9 then
+        chatWindow.Visible = not chatWindow.Visible
+        if chatWindow.Visible then
+            inputBox:CaptureFocus()
         end
     end
 end)
 
--- DRAGGABLE WINDOW
-local dragging = false
-local dragStart, startPos
+-- =======================
+-- INISIALISASI
+-- =======================
 
-TitleBar.InputBegan:Connect(function(input)
+-- Pesan sistem awal
+addMessage("SYSTEM", "Executor Chat System Loaded", true)
+addMessage("SYSTEM", "This is a separate chat from Roblox", true)
+addMessage("SYSTEM", "Press F9 or click 💬 button", true)
+addMessage("SYSTEM", "Type your message below", true)
+
+-- Test message
+addMessage("BOT", "Chat system is working!", false)
+
+-- =======================
+-- FUNGSI TAMBAHAN
+-- =======================
+
+-- Buat window bisa di-drag
+local isDragging = false
+local dragStartPosition, windowStartPosition
+
+header.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        dragStart = input.Position
-        startPos = Window.Position
+        isDragging = true
+        dragStartPosition = input.Position
+        windowStartPosition = chatWindow.Position
     end
 end)
 
-TitleBar.InputEnded:Connect(function(input)
+header.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = false
+        isDragging = false
     end
 end)
 
-UI.InputChanged:Connect(function(input)
-    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-        local delta = input.Position - dragStart
-        Window.Position = UDim2.new(
-            startPos.X.Scale,
-            startPos.X.Offset + delta.X,
-            startPos.Y.Scale,
-            startPos.Y.Offset + delta.Y
+UserInput.InputChanged:Connect(function(input)
+    if isDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStartPosition
+        chatWindow.Position = UDim2.new(
+            windowStartPosition.X.Scale,
+            windowStartPosition.X.Offset + delta.X,
+            windowStartPosition.Y.Scale,
+            windowStartPosition.Y.Offset + delta.Y
         )
     end
 end)
 
--- LOAD EXISTING MESSAGES
-local function LoadExistingMessages()
-    -- Add system messages
-    AddGlobalMessage("SYSTEM", "═══════════════════════════", true)
-    AddGlobalMessage("SYSTEM", "   EXECUTOR CHAT v2.0", true)
-    AddGlobalMessage("SYSTEM", "═══════════════════════════", true)
-    AddGlobalMessage("SYSTEM", "All users with this script", true)
-    AddGlobalMessage("SYSTEM", "can see these messages!", true)
-    AddGlobalMessage("SYSTEM", "Press F8 or click 💬 button", true)
-    
-    -- Load previous messages from global storage
-    for i, msg in ipairs(_G.ExecutorChatData.Messages or {}) do
-        if i > 10 then break end -- Limit to last 10 messages
-        if msg.Sender ~= "SYSTEM" then
-            AddGlobalMessage(msg.Sender, msg.Message, msg.System)
-        end
-    end
-end
+-- =======================
+-- OUTPUT KONFIRMASI
+-- =======================
+print("========================================")
+print("✅ EXECUTOR CHAT SYSTEM LOADED")
+print("✅ Press F9 or click 💬 button")
+print("✅ Chat is separate from Roblox chat")
+print("========================================")
 
--- INITIALIZE
-LoadExistingMessages()
-UpdateOnlineUsers()
-
--- AUTO-UPDATE LOOP
-task.spawn(function()
-    while true do
-        wait(5)
-        if Window.Visible then
-            UpdateOnlineUsers()
-        end
-    end
-end)
-
-print("═══════════════════════════════════")
-print("💬 EXECUTOR CHAT LOADED SUCCESSFULLY")
-print("All executors can see this chat")
-print("Press F8 or click 💬 button")
-print("═══════════════════════════════════")
+-- Auto test
+wait(1)
+addMessage("SYSTEM", "Chat system is ready to use!", true)
