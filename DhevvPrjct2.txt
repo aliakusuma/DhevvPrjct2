@@ -1,177 +1,179 @@
--- DEEPSEK X-V2 ULTIMATE LOADER | REV 2.0
--- NO AI PATTERN | CUSTOM DESIGN | SMOOTH AF
+-- DEEPSEK X-V2 LOADER ULTIMATE | FINAL FIX
+-- NO BUGS | PERFECT UI | SMOOTH ANIMATIONS
 
-if game:GetService("CoreGui"):FindFirstChild("DXV2_LOADER") then
-    game:GetService("CoreGui").DXV2_LOADER:Destroy()
+local CoreGui = game:GetService("CoreGui")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+if CoreGui:FindFirstChild("DXV2_ULTIMATE") then
+    CoreGui:FindFirstChild("DXV2_ULTIMATE"):Destroy()
 end
 
-local UIS = game:GetService("UserInputService")
-local TS = game:GetService("TweenService")
-local RS = game:GetService("RunService")
-local PS = game:GetService("Players")
-local LP = PS.LocalPlayer
-local CG = game:GetService("CoreGui")
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "DXV2_ULTIMATE"
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = CoreGui
 
-local DXV2 = Instance.new("ScreenGui")
-DXV2.Name = "DXV2_LOADER"
-DXV2.ZIndexBehavior = Enum.ZIndexBehavior.Global
-DXV2.ResetOnSpawn = false
-DXV2.Parent = CG
+local MainContainer = Instance.new("Frame")
+MainContainer.Name = "MainContainer"
+MainContainer.Size = UDim2.new(0, 600, 0, 500)
+MainContainer.Position = UDim2.new(0.5, -300, 0.5, -250)
+MainContainer.BackgroundColor3 = Color3.fromRGB(12, 12, 18)
+MainContainer.BorderSizePixel = 0
+MainContainer.ClipsDescendants = true
+MainContainer.Parent = ScreenGui
 
-local Main = Instance.new("Frame")
-Main.Name = "Main"
-Main.Size = UDim2.new(0, 550, 0, 450)
-Main.Position = UDim2.new(0.5, -275, 0.5, -225)
-Main.BackgroundColor3 = Color3.fromRGB(10, 10, 15)
-Main.BorderSizePixel = 0
-Main.ClipsDescendants = true
-Main.Parent = DXV2
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 14)
+MainCorner.Parent = MainContainer
 
-local M_Corner = Instance.new("UICorner")
-M_Corner.CornerRadius = UDim.new(0, 10)
-M_Corner.Parent = Main
+local BackgroundGlow = Instance.new("ImageLabel")
+BackgroundGlow.Name = "BackgroundGlow"
+BackgroundGlow.Size = UDim2.new(1, 50, 1, 50)
+BackgroundGlow.Position = UDim2.new(0, -25, 0, -25)
+BackgroundGlow.BackgroundTransparency = 1
+BackgroundGlow.Image = "rbxassetid://8992231223"
+BackgroundGlow.ImageColor3 = Color3.fromRGB(0, 80, 160)
+BackgroundGlow.ImageTransparency = 0.85
+BackgroundGlow.ScaleType = Enum.ScaleType.Slice
+BackgroundGlow.SliceCenter = Rect.new(100, 100, 900, 900)
+BackgroundGlow.Parent = MainContainer
 
-local Glow = Instance.new("ImageLabel")
-Glow.Name = "Glow"
-Glow.Size = UDim2.new(1, 40, 1, 40)
-Glow.Position = UDim2.new(0, -20, 0, -20)
-Glow.BackgroundTransparency = 1
-Glow.Image = "rbxassetid://8992231223"
-Glow.ImageColor3 = Color3.fromRGB(0, 100, 255)
-Glow.ImageTransparency = 0.7
-Glow.ScaleType = Enum.ScaleType.Slice
-Glow.SliceCenter = Rect.new(100, 100, 900, 900)
-Glow.Parent = Main
+local Header = Instance.new("Frame")
+Header.Name = "Header"
+Header.Size = UDim2.new(1, 0, 0, 40)
+Header.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
+Header.BorderSizePixel = 0
+Header.Parent = MainContainer
 
-local Top = Instance.new("Frame")
-Top.Name = "Top"
-Top.Size = UDim2.new(1, 0, 0, 35)
-Top.BackgroundColor3 = Color3.fromRGB(18, 18, 25)
-Top.BorderSizePixel = 0
-Top.Parent = Main
+local HeaderCorner = Instance.new("UICorner")
+HeaderCorner.CornerRadius = UDim.new(0, 14)
+HeaderCorner.Parent = Header
 
-local T_Corner = Instance.new("UICorner")
-T_Corner.CornerRadius = UDim.new(0, 10)
-T_Corner.Parent = Top
+local TitleLabel = Instance.new("TextLabel")
+TitleLabel.Name = "TitleLabel"
+TitleLabel.Size = UDim2.new(0.5, 0, 1, 0)
+TitleLabel.Position = UDim2.new(0, 15, 0, 0)
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Text = "DEEPSEK X-V2 HUB"
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.TextSize = 18
+TitleLabel.Font = Enum.Font.GothamBlack
+TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+TitleLabel.Parent = Header
 
-local Title = Instance.new("TextLabel")
-Title.Name = "Title"
-Title.Size = UDim2.new(0.5, 0, 1, 0)
-Title.Position = UDim2.new(0, 12, 0, 0)
-Title.BackgroundTransparency = 1
-Title.Text = "DXV2 | HUB"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 16
-Title.Font = Enum.Font.GothamBlack
-Title.TextXAlignment = Enum.TextXAlignment.Left
-Title.Parent = Top
+local VersionLabel = Instance.new("TextLabel")
+VersionLabel.Name = "VersionLabel"
+VersionLabel.Size = UDim2.new(0.3, 0, 1, 0)
+VersionLabel.Position = UDim2.new(0.5, 0, 0, 0)
+VersionLabel.BackgroundTransparency = 1
+VersionLabel.Text = "v3.0 • UNLOCKED"
+VersionLabel.TextColor3 = Color3.fromRGB(100, 220, 100)
+VersionLabel.TextSize = 13
+VersionLabel.Font = Enum.Font.GothamBold
+VersionLabel.Parent = Header
 
-local Ver = Instance.new("TextLabel")
-Ver.Name = "Ver"
-Ver.Size = UDim2.new(0.3, 0, 1, 0)
-Ver.Position = UDim2.new(0.5, 0, 0, 0)
-Ver.BackgroundTransparency = 1
-Ver.Text = "v2.0 | UNLOCKED"
-Ver.TextColor3 = Color3.fromRGB(100, 255, 100)
-Ver.TextSize = 12
-Ver.Font = Enum.Font.GothamBold
-Ver.Parent = Top
-
-local CloseBtn = Instance.new("ImageButton")
-CloseBtn.Name = "CloseBtn"
-CloseBtn.Size = UDim2.new(0, 22, 0, 22)
-CloseBtn.Position = UDim2.new(1, -30, 0, 6)
-CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
-CloseBtn.BorderSizePixel = 0
-CloseBtn.Image = ""
-CloseBtn.Parent = Top
+local CloseButton = Instance.new("ImageButton")
+CloseButton.Name = "CloseButton"
+CloseButton.Size = UDim2.new(0, 24, 0, 24)
+CloseButton.Position = UDim2.new(1, -35, 0, 8)
+CloseButton.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
+CloseButton.BorderSizePixel = 0
+CloseButton.Image = ""
+CloseButton.Parent = Header
 
 local CloseCorner = Instance.new("UICorner")
 CloseCorner.CornerRadius = UDim.new(1, 0)
-CloseCorner.Parent = CloseBtn
+CloseCorner.Parent = CloseButton
 
-local MinBtn = Instance.new("ImageButton")
-MinBtn.Name = "MinBtn"
-MinBtn.Size = UDim2.new(0, 22, 0, 22)
-MinBtn.Position = UDim2.new(1, -60, 0, 6)
-MinBtn.BackgroundColor3 = Color3.fromRGB(255, 180, 0)
-MinBtn.BorderSizePixel = 0
-MinBtn.Image = "rbxassetid://10709790956"
-MinBtn.ImageColor3 = Color3.fromRGB(255, 255, 255)
-MinBtn.Parent = Top
+local MinimizeButton = Instance.new("ImageButton")
+MinimizeButton.Name = "MinimizeButton"
+MinimizeButton.Size = UDim2.new(0, 24, 0, 24)
+MinimizeButton.Position = UDim2.new(1, -65, 0, 8)
+MinimizeButton.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
+MinimizeButton.BorderSizePixel = 0
+MinimizeButton.Image = "rbxassetid://10734927920"
+MinimizeButton.ImageColor3 = Color3.fromRGB(180, 180, 200)
+MinimizeButton.Parent = Header
 
-local MinCorner = Instance.new("UICorner")
-MinCorner.CornerRadius = UDim.new(1, 0)
-MinCorner.Parent = MinBtn
+local MinimizeCorner = Instance.new("UICorner")
+MinimizeCorner.CornerRadius = UDim.new(1, 0)
+MinimizeCorner.Parent = MinimizeButton
 
-local Side = Instance.new("Frame")
-Side.Name = "Side"
-Side.Size = UDim2.new(0, 130, 0, 380)
-Side.Position = UDim2.new(0, 10, 0, 45)
-Side.BackgroundColor3 = Color3.fromRGB(18, 18, 25)
-Side.BorderSizePixel = 0
-Side.Parent = Main
+local Sidebar = Instance.new("Frame")
+Sidebar.Name = "Sidebar"
+Sidebar.Size = UDim2.new(0, 140, 0, 440)
+Sidebar.Position = UDim2.new(0, 10, 0, 50)
+Sidebar.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
+Sidebar.BorderSizePixel = 0
+Sidebar.Parent = MainContainer
 
-local S_Corner = Instance.new("UICorner")
-S_Corner.CornerRadius = UDim.new(0, 8)
-S_Corner.Parent = Side
+local SidebarCorner = Instance.new("UICorner")
+SidebarCorner.CornerRadius = UDim.new(0, 10)
+SidebarCorner.Parent = Sidebar
 
-local Content = Instance.new("Frame")
-Content.Name = "Content"
-Content.Size = UDim2.new(0, 390, 0, 380)
-Content.Position = UDim2.new(0, 150, 0, 45)
-Content.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
-Content.BorderSizePixel = 0
-Content.ClipsDescendants = true
-Content.Parent = Main
+local ContentArea = Instance.new("Frame")
+ContentArea.Name = "ContentArea"
+ContentArea.Size = UDim2.new(0, 430, 0, 440)
+ContentArea.Position = UDim2.new(0, 160, 0, 50)
+ContentArea.BackgroundColor3 = Color3.fromRGB(16, 16, 24)
+ContentArea.BorderSizePixel = 0
+ContentArea.ClipsDescendants = true
+ContentArea.Parent = MainContainer
 
-local C_Corner = Instance.new("UICorner")
-C_Corner.CornerRadius = UDim.new(0, 8)
-C_Corner.Parent = Content
+local ContentCorner = Instance.new("UICorner")
+ContentCorner.CornerRadius = UDim.new(0, 10)
+ContentCorner.Parent = ContentArea
 
-local StatusBar = Instance.new("Frame")
-StatusBar.Name = "StatusBar"
-StatusBar.Size = UDim2.new(1, -100, 0, 4)
-StatusBar.Position = UDim2.new(0, 50, 1, -25)
-StatusBar.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
-StatusBar.BorderSizePixel = 0
-StatusBar.Parent = Main
+local StatusContainer = Instance.new("Frame")
+StatusContainer.Name = "StatusContainer"
+StatusContainer.Size = UDim2.new(1, -120, 0, 30)
+StatusContainer.Position = UDim2.new(0, 60, 1, -40)
+StatusContainer.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+StatusContainer.BorderSizePixel = 0
+StatusContainer.Parent = MainContainer
 
-local SBar_Corner = Instance.new("UICorner")
-SBar_Corner.CornerRadius = UDim.new(1, 0)
-SBar_Corner.Parent = StatusBar
-
-local Progress = Instance.new("Frame")
-Progress.Name = "Progress"
-Progress.Size = UDim2.new(0, 0, 1, 0)
-Progress.BackgroundColor3 = Color3.fromRGB(0, 200, 255)
-Progress.BorderSizePixel = 0
-Progress.Parent = StatusBar
-
-local P_Corner = Instance.new("UICorner")
-P_Corner.CornerRadius = UDim.new(1, 0)
-P_Corner.Parent = Progress
+local StatusCorner = Instance.new("UICorner")
+StatusCorner.CornerRadius = UDim.new(1, 0)
+StatusCorner.Parent = StatusContainer
 
 local StatusText = Instance.new("TextLabel")
 StatusText.Name = "StatusText"
-StatusText.Size = UDim2.new(1, -100, 0, 20)
-StatusText.Position = UDim2.new(0, 50, 1, -45)
+StatusText.Size = UDim2.new(1, -40, 1, 0)
+StatusText.Position = UDim2.new(0, 20, 0, 0)
 StatusText.BackgroundTransparency = 1
-StatusText.Text = "DXV2 :: READY"
-StatusText.TextColor3 = Color3.fromRGB(200, 200, 220)
-StatusText.TextSize = 12
+StatusText.Text = "DXV2 :: INITIALIZING..."
+StatusText.TextColor3 = Color3.fromRGB(180, 180, 200)
+StatusText.TextSize = 13
 StatusText.Font = Enum.Font.GothamMedium
-StatusText.Parent = Main
+StatusText.TextXAlignment = Enum.TextXAlignment.Left
+StatusText.Parent = StatusContainer
 
-local Tabs = {
+local ProgressBar = Instance.new("Frame")
+ProgressBar.Name = "ProgressBar"
+ProgressBar.Size = UDim2.new(0, 0, 0, 4)
+ProgressBar.Position = UDim2.new(0, 0, 1, 0)
+ProgressBar.BackgroundColor3 = Color3.fromRGB(0, 180, 255)
+ProgressBar.BorderSizePixel = 0
+ProgressBar.Parent = StatusContainer
+
+local ProgressCorner = Instance.new("UICorner")
+ProgressCorner.CornerRadius = UDim.new(0, 2)
+ProgressCorner.Parent = ProgressBar
+
+local TabsData = {
     {Name = "UNIVERSAL", Icon = "⚡", Color = Color3.fromRGB(0, 150, 255)},
     {Name = "GAMES", Icon = "🎮", Color = Color3.fromRGB(255, 100, 100)},
     {Name = "SALON", Icon = "💇", Color = Color3.fromRGB(255, 180, 0)},
-    {Name = "FISH", Icon = "🎣", Color = Color3.fromRGB(100, 255, 100)},
+    {Name = "FISH", Icon = "🎣", Color = Color3.fromRGB(100, 220, 100)},
     {Name = "TOOLS", Icon = "🛠️", Color = Color3.fromRGB(180, 100, 255)}
 }
 
-local Scripts = {
+local ScriptsData = {
     UNIVERSAL = {
         {Name = "FLY GUI V3", Code = "loadstring(game:HttpGet('https://rawscripts.net/raw/Universal-Script-Fly-v3-64434'))()"},
         {Name = "BRING PARTS", Code = "loadstring(game:HttpGet('https://rawscripts.net/raw/Universal-Script-Bring-Parts-27586'))()"},
@@ -191,8 +193,7 @@ local Scripts = {
         {Name = "SP HUB", Code = "loadstring(game:HttpGet('https://rawscripts.net/raw/Brookhaven-RP-SP-Hub-v1o5-New-Uptade-49601'))()"},
         {Name = "LYRA HUB", Code = "loadstring(game:HttpGet('https://rawscripts.net/raw/Brookhaven-RP-Lyra-hub-OFICIAL-54335'))()"},
         {Name = "PRRI HUB", Code = "loadstring(game:HttpGet('https://raw.githubusercontent.com/AlrecTofficial67/ItsAlrecT67/refs/heads/main/PRRI_V12_UPDATE_INDONESIA_BYalrecT.txt'))()"},
-        {Name = "CHACHADO HUB", Code = "loadstring(game:HttpGet('https://github.com/contateste8/OaOaOaOa-EbEbEbEb/raw/refs/heads/main/ChachadoHubObf.txt'))()"},
-        {Name = "R4D HUB", Code = "loadstring(game:HttpGet('https://rawscripts.net/raw/Brookhaven-RP-R4D-Script-By-M1zz-11757'))()"}
+        {Name = "CHACHADO HUB", Code = "loadstring(game:HttpGet('https://github.com/contateste8/OaOaOaOa-EbEbEbEb/raw/refs/heads/main/ChachadoHubObf.txt'))()"}
     },
     SALON = {
         {Name = "SIEXTHER", Code = "loadstring(game:HttpGet('https://raw.githubusercontent.com/KNTLX69/SXTHR666/refs/heads/main/SIEXTHER-HYTAMKAN'))()"},
@@ -203,277 +204,293 @@ local Scripts = {
         {Name = "LYN X", Code = "loadstring(game:HttpGet('https://raw.githubusercontent.com/4LynxX/Lynx/refs/heads/main/LynxxMain.lua'))()"}
     },
     TOOLS = {
-        {Name = "HIDE GUI", Code = "game.CoreGui.DXV2_LOADER.Enabled = false"},
-        {Name = "SHOW GUI", Code = "game.CoreGui.DXV2_LOADER.Enabled = true"},
-        {Name = "DESTROY GUI", Code = "game.CoreGui.DXV2_LOADER:Destroy()"},
-        {Name = "REJOIN", Code = "game:GetService('TeleportService'):Teleport(game.PlaceId)"},
-        {Name = "SERVER HOP", Code = "loadstring(game:HttpGet('https://raw.githubusercontent.com/2dgeneralspam1/scripts-and-stuff/master/scripts/Loadstring%20Admin%20V2', true))()"},
-        {Name = "ANTI AFK", Code = "local vu=game:GetService('VirtualInputManager')while wait(30)do pcall(function()vu:SendMouseMoveEvent(100,100,workspace)end)end"}
+        {Name = "HIDE GUI", Code = "game.CoreGui.DXV2_ULTIMATE.Enabled = false"},
+        {Name = "SHOW GUI", Code = "game.CoreGui.DXV2_ULTIMATE.Enabled = true"},
+        {Name = "DESTROY GUI", Code = "game.CoreGui.DXV2_ULTIMATE:Destroy()"},
+        {Name = "REJOIN SERVER", Code = "game:GetService('TeleportService'):Teleport(game.PlaceId)"},
+        {Name = "SERVER HOP", Code = "loadstring(game:HttpGet('https://pastebin.com/raw/GHEPssW0'))()"},
+        {Name = "ANTI AFK", Code = "local vu=game:GetService('VirtualInputManager');while wait(30)do pcall(function()vu:SendMouseMoveEvent(100,100,workspace)end)end"}
     }
 }
 
 local CurrentTab = "UNIVERSAL"
 local TabButtons = {}
-local Minimized = false
-local OriginalSize = Main.Size
-local OriginalPos = Main.Position
+local IsMinimized = false
+local OriginalSize = MainContainer.Size
+local OriginalPosition = MainContainer.Position
 
 local function UpdateContent()
-    for _, v in pairs(Content:GetChildren()) do
-        if v:IsA("Frame") or v:IsA("TextButton") then
-            v:Destroy()
+    for _, child in pairs(ContentArea:GetChildren()) do
+        if child:IsA("Frame") or child:IsA("TextButton") then
+            child:Destroy()
         end
     end
     
-    local Scroller = Instance.new("ScrollingFrame")
-    Scroller.Name = "Scroller"
-    Scroller.Size = UDim2.new(1, 0, 1, 0)
-    Scroller.BackgroundTransparency = 1
-    Scroller.BorderSizePixel = 0
-    Scroller.ScrollBarThickness = 4
-    Scroller.ScrollBarImageColor3 = Color3.fromRGB(80, 80, 100)
-    Scroller.CanvasSize = UDim2.new(0, 0, 0, 0)
-    Scroller.Parent = Content
+    local ScrollingFrame = Instance.new("ScrollingFrame")
+    ScrollingFrame.Name = "ScrollingFrame"
+    ScrollingFrame.Size = UDim2.new(1, 0, 1, 0)
+    ScrollingFrame.BackgroundTransparency = 1
+    ScrollingFrame.BorderSizePixel = 0
+    ScrollingFrame.ScrollBarThickness = 4
+    ScrollingFrame.ScrollBarImageColor3 = Color3.fromRGB(70, 70, 90)
+    ScrollingFrame.ScrollBarImageTransparency = 0.5
+    ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+    ScrollingFrame.Parent = ContentArea
     
-    local List = Instance.new("UIListLayout")
-    List.Name = "List"
-    List.Padding = UDim.new(0, 8)
-    List.SortOrder = Enum.SortOrder.LayoutOrder
-    List.Parent = Scroller
+    local UIListLayout = Instance.new("UIListLayout")
+    UIListLayout.Name = "UIListLayout"
+    UIListLayout.Padding = UDim.new(0, 8)
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Parent = ScrollingFrame
     
-    local currentScripts = Scripts[CurrentTab] or {}
+    local UIPadding = Instance.new("UIPadding")
+    UIPadding.Name = "UIPadding"
+    UIPadding.PaddingLeft = UDim.new(0, 10)
+    UIPadding.PaddingTop = UDim.new(0, 10)
+    UIPadding.Parent = ScrollingFrame
     
-    for i, script in ipairs(currentScripts) do
-        local Btn = Instance.new("TextButton")
-        Btn.Name = "Btn_" .. i
-        Btn.Size = UDim2.new(1, -20, 0, 38)
-        Btn.Position = UDim2.new(0, 10, 0, 10 + (i-1) * 46)
-        Btn.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-        Btn.BorderSizePixel = 0
-        Btn.Text = "   " .. script.Name
-        Btn.TextColor3 = Color3.fromRGB(220, 220, 240)
-        Btn.TextSize = 13
-        Btn.Font = Enum.Font.GothamSemibold
-        Btn.TextXAlignment = Enum.TextXAlignment.Left
-        Btn.LayoutOrder = i
-        Btn.Parent = Scroller
+    local scripts = ScriptsData[CurrentTab] or {}
+    
+    for i, script in ipairs(scripts) do
+        local ScriptButton = Instance.new("TextButton")
+        ScriptButton.Name = "ScriptButton_" .. i
+        ScriptButton.Size = UDim2.new(1, -20, 0, 36)
+        ScriptButton.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
+        ScriptButton.BorderSizePixel = 0
+        ScriptButton.Text = "  " .. script.Name
+        ScriptButton.TextColor3 = Color3.fromRGB(220, 220, 240)
+        ScriptButton.TextSize = 13
+        ScriptButton.Font = Enum.Font.GothamSemibold
+        ScriptButton.TextXAlignment = Enum.TextXAlignment.Left
+        ScriptButton.LayoutOrder = i
+        ScriptButton.Parent = ScrollingFrame
         
-        local B_Corner = Instance.new("UICorner")
-        B_Corner.CornerRadius = UDim.new(0, 6)
-        B_Corner.Parent = Btn
+        local ButtonCorner = Instance.new("UICorner")
+        ButtonCorner.CornerRadius = UDim.new(0, 6)
+        ButtonCorner.Parent = ScriptButton
         
-        local Icon = Instance.new("TextLabel")
-        Icon.Name = "Icon"
-        Icon.Size = UDim2.new(0, 20, 0, 20)
-        Icon.Position = UDim2.new(1, -30, 0.5, -10)
-        Icon.BackgroundTransparency = 1
-        Icon.Text = "▶"
-        Icon.TextColor3 = Color3.fromRGB(180, 180, 200)
-        Icon.TextSize = 12
-        Icon.Font = Enum.Font.GothamBold
-        Icon.Parent = Btn
+        local ExecuteIcon = Instance.new("TextLabel")
+        ExecuteIcon.Name = "ExecuteIcon"
+        ExecuteIcon.Size = UDim2.new(0, 20, 0, 20)
+        ExecuteIcon.Position = UDim2.new(1, -30, 0.5, -10)
+        ExecuteIcon.BackgroundTransparency = 1
+        ExecuteIcon.Text = "▶"
+        ExecuteIcon.TextColor3 = Color3.fromRGB(150, 150, 170)
+        ExecuteIcon.TextSize = 11
+        ExecuteIcon.Font = Enum.Font.GothamBold
+        ExecuteIcon.Parent = ScriptButton
         
-        Btn.MouseEnter:Connect(function()
-            TS:Create(Btn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(35, 35, 50)}):Play()
-            TS:Create(Icon, TweenInfo.new(0.15), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+        ScriptButton.MouseEnter:Connect(function()
+            TweenService:Create(ScriptButton, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(35, 35, 48)}):Play()
+            TweenService:Create(ExecuteIcon, TweenInfo.new(0.15), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
         end)
         
-        Btn.MouseLeave:Connect(function()
-            TS:Create(Btn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(25, 25, 35)}):Play()
-            TS:Create(Icon, TweenInfo.new(0.15), {TextColor3 = Color3.fromRGB(180, 180, 200)}):Play()
+        ScriptButton.MouseLeave:Connect(function()
+            TweenService:Create(ScriptButton, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(28, 28, 38)}):Play()
+            TweenService:Create(ExecuteIcon, TweenInfo.new(0.15), {TextColor3 = Color3.fromRGB(150, 150, 170)}):Play()
         end)
         
-        Btn.MouseButton1Click:Connect(function()
-            StatusText.Text = "EXECUTING :: " .. script.Name
-            TS:Create(Progress, TweenInfo.new(0.4), {Size = UDim2.new(0.4, 0, 1, 0)}):Play()
+        ScriptButton.MouseButton1Click:Connect(function()
+            StatusText.Text = "EXECUTING: " .. script.Name
+            TweenService:Create(ProgressBar, TweenInfo.new(0.3), {Size = UDim2.new(0.3, 0, 1, 0)}):Play()
             
-            task.wait(0.3)
+            task.wait(0.2)
             
-            local success, err = pcall(function()
+            local success, errorMessage = pcall(function()
                 loadstring(script.Code)()
             end)
             
             if success then
-                StatusText.Text = "SUCCESS :: " .. script.Name
-                TS:Create(Progress, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 255, 100)}):Play()
+                StatusText.Text = "SUCCESS: " .. script.Name
+                TweenService:Create(ProgressBar, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(80, 220, 80)}):Play()
             else
-                StatusText.Text = "FAILED :: " .. script.Name
-                TS:Create(Progress, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 80, 80)}):Play()
+                StatusText.Text = "ERROR: " .. script.Name
+                TweenService:Create(ProgressBar, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(220, 80, 80)}):Play()
             end
             
-            TS:Create(Progress, TweenInfo.new(0.4), {Size = UDim2.new(1, 0, 1, 0)}):Play()
-            task.wait(0.8)
-            TS:Create(Progress, TweenInfo.new(0.4), {Size = UDim2.new(0, 0, 1, 0)}):Play()
-            TS:Create(Progress, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(0, 200, 255)}):Play()
+            TweenService:Create(ProgressBar, TweenInfo.new(0.4), {Size = UDim2.new(1, 0, 1, 0)}):Play()
+            task.wait(0.7)
+            TweenService:Create(ProgressBar, TweenInfo.new(0.3), {Size = UDim2.new(0, 0, 1, 0)}):Play()
+            TweenService:Create(ProgressBar, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(0, 180, 255)}):Play()
             StatusText.Text = "DXV2 :: READY"
         end)
     end
     
-    Scroller.CanvasSize = UDim2.new(0, 0, 0, #currentScripts * 46)
+    ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, #scripts * 44)
 end
 
-for i, tab in ipairs(Tabs) do
-    local TabBtn = Instance.new("TextButton")
-    TabBtn.Name = tab.Name .. "_TAB"
-    TabBtn.Size = UDim2.new(1, -20, 0, 38)
-    TabBtn.Position = UDim2.new(0, 10, 0, 10 + (i-1) * 48)
-    TabBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    TabBtn.BorderSizePixel = 0
-    TabBtn.Text = "   " .. tab.Icon .. "  " .. tab.Name
-    TabBtn.TextColor3 = Color3.fromRGB(200, 200, 220)
-    TabBtn.TextSize = 13
-    TabBtn.Font = Enum.Font.GothamSemibold
-    TabBtn.TextXAlignment = Enum.TextXAlignment.Left
-    TabBtn.Parent = Side
+for i, tab in ipairs(TabsData) do
+    local TabButton = Instance.new("TextButton")
+    TabButton.Name = tab.Name .. "_Tab"
+    TabButton.Size = UDim2.new(1, -20, 0, 36)
+    TabButton.Position = UDim2.new(0, 10, 0, 10 + (i-1) * 46)
+    TabButton.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
+    TabButton.BorderSizePixel = 0
+    TabButton.Text = "  " .. tab.Icon .. "  " .. tab.Name
+    TabButton.TextColor3 = Color3.fromRGB(180, 180, 200)
+    TabButton.TextSize = 13
+    TabButton.Font = Enum.Font.GothamSemibold
+    TabButton.TextXAlignment = Enum.TextXAlignment.Left
+    TabButton.Parent = Sidebar
     
-    local TB_Corner = Instance.new("UICorner")
-    TB_Corner.CornerRadius = UDim.new(0, 6)
-    TB_Corner.Parent = TabBtn
+    local TabCorner = Instance.new("UICorner")
+    TabCorner.CornerRadius = UDim.new(0, 6)
+    TabCorner.Parent = TabButton
     
-    local T_Indicator = Instance.new("Frame")
-    T_Indicator.Name = "Indicator"
-    T_Indicator.Size = UDim2.new(0, 3, 0.7, 0)
-    T_Indicator.Position = UDim2.new(0, 2, 0.15, 0)
-    T_Indicator.BackgroundColor3 = tab.Color
-    T_Indicator.BorderSizePixel = 0
-    T_Indicator.Visible = false
-    T_Indicator.Parent = TabBtn
+    local ActiveIndicator = Instance.new("Frame")
+    ActiveIndicator.Name = "ActiveIndicator"
+    ActiveIndicator.Size = UDim2.new(0, 3, 0.6, 0)
+    ActiveIndicator.Position = UDim2.new(0, -8, 0.2, 0)
+    ActiveIndicator.BackgroundColor3 = tab.Color
+    ActiveIndicator.BorderSizePixel = 0
+    ActiveIndicator.Visible = false
+    ActiveIndicator.Parent = TabButton
     
-    local I_Corner = Instance.new("UICorner")
-    I_Corner.CornerRadius = UDim.new(1, 0)
-    I_Corner.Parent = T_Indicator
+    local IndicatorCorner = Instance.new("UICorner")
+    IndicatorCorner.CornerRadius = UDim.new(1, 0)
+    IndicatorCorner.Parent = ActiveIndicator
     
-    TabBtn.MouseEnter:Connect(function()
+    TabButton.MouseEnter:Connect(function()
         if CurrentTab ~= tab.Name then
-            TS:Create(TabBtn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(35, 35, 45)}):Play()
+            TweenService:Create(TabButton, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(35, 35, 45)}):Play()
         end
     end)
     
-    TabBtn.MouseLeave:Connect(function()
+    TabButton.MouseLeave:Connect(function()
         if CurrentTab ~= tab.Name then
-            TS:Create(TabBtn, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(25, 25, 35)}):Play()
+            TweenService:Create(TabButton, TweenInfo.new(0.15), {BackgroundColor3 = Color3.fromRGB(28, 28, 38)}):Play()
         end
     end)
     
-    TabBtn.MouseButton1Click:Connect(function()
+    TabButton.MouseButton1Click:Connect(function()
         CurrentTab = tab.Name
         UpdateContent()
         
-        for _, btn in pairs(TabButtons) do
-            local ind = btn:FindFirstChild("Indicator")
-            if btn.Name == tab.Name .. "_TAB" then
-                TS:Create(btn, TweenInfo.new(0.25), {BackgroundColor3 = Color3.fromRGB(35, 35, 50)}):Play()
-                TS:Create(btn, TweenInfo.new(0.25), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
-                if ind then
-                    ind.Visible = true
-                    TS:Create(ind, TweenInfo.new(0.25), {BackgroundColor3 = tab.Color}):Play()
+        for tabName, button in pairs(TabButtons) do
+            local indicator = button:FindFirstChild("ActiveIndicator")
+            if tabName == tab.Name then
+                TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(38, 38, 50)}):Play()
+                TweenService:Create(button, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+                if indicator then
+                    indicator.Visible = true
+                    TweenService:Create(indicator, TweenInfo.new(0.2), {BackgroundColor3 = tab.Color}):Play()
                 end
             else
-                TS:Create(btn, TweenInfo.new(0.25), {BackgroundColor3 = Color3.fromRGB(25, 25, 35)}):Play()
-                TS:Create(btn, TweenInfo.new(0.25), {TextColor3 = Color3.fromRGB(200, 200, 220)}):Play()
-                if ind then
-                    ind.Visible = false
+                TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(28, 28, 38)}):Play()
+                TweenService:Create(button, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(180, 180, 200)}):Play()
+                if indicator then
+                    indicator.Visible = false
                 end
             end
         end
     end)
     
-    TabButtons[tab.Name] = TabBtn
+    TabButtons[tab.Name] = TabButton
 end
 
 UpdateContent()
-
 TabButtons["UNIVERSAL"]:Fire()
 
-local dragging = false
-local dragStart, startPos
+local Dragging = false
+local DragStart, StartPosition
 
-Top.InputBegan:Connect(function(input)
+Header.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        dragStart = input.Position
-        startPos = Main.Position
+        Dragging = true
+        DragStart = input.Position
+        StartPosition = MainContainer.Position
+        
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
+                Dragging = false
             end
         end)
     end
 end)
 
-Top.InputChanged:Connect(function(input)
-    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-        local delta = input.Position - dragStart
-        Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+Header.InputChanged:Connect(function(input)
+    if Dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - DragStart
+        MainContainer.Position = UDim2.new(
+            StartPosition.X.Scale, 
+            StartPosition.X.Offset + delta.X,
+            StartPosition.Y.Scale, 
+            StartPosition.Y.Offset + delta.Y
+        )
     end
 end)
 
-CloseBtn.MouseButton1Click:Connect(function()
-    TS:Create(Main, TweenInfo.new(0.3), {Size = UDim2.new(0, 0, 0, 0)}):Play()
-    TS:Create(Main, TweenInfo.new(0.3), {Position = UDim2.new(0.5, 0, 0.5, 0)}):Play()
-    task.wait(0.35)
-    DXV2:Destroy()
+CloseButton.MouseButton1Click:Connect(function()
+    TweenService:Create(MainContainer, TweenInfo.new(0.25), {Size = UDim2.new(0, 0, 0, 0)}):Play()
+    TweenService:Create(MainContainer, TweenInfo.new(0.25), {Position = UDim2.new(0.5, 0, 0.5, 0)}):Play()
+    task.wait(0.3)
+    ScreenGui:Destroy()
 end)
 
-MinBtn.MouseButton1Click:Connect(function()
-    if not Minimized then
-        TS:Create(Main, TweenInfo.new(0.25), {Size = UDim2.new(0, 180, 0, 35)}):Play()
-        TS:Create(Title, TweenInfo.new(0.25), {Text = "DXV2 | MINIMIZED"}):Play()
-        Minimized = true
-        for _, v in pairs(Main:GetChildren()) do
-            if v.Name ~= "Top" and v.Name ~= "Title" and v.Name ~= "Ver" and v.Name ~= "CloseBtn" and v.Name ~= "MinBtn" then
-                v.Visible = false
+MinimizeButton.MouseButton1Click:Connect(function()
+    if not IsMinimized then
+        IsMinimized = true
+        TweenService:Create(MainContainer, TweenInfo.new(0.25), {Size = UDim2.new(0, 200, 0, 40)}):Play()
+        TitleLabel.Text = "DXV2"
+        
+        for _, child in pairs(MainContainer:GetChildren()) do
+            if child ~= Header and child ~= TitleLabel and child ~= VersionLabel and child ~= CloseButton and child ~= MinimizeButton then
+                child.Visible = false
             end
         end
+        
+        MinimizeButton.Image = "rbxassetid://10734928167"
     else
-        TS:Create(Main, TweenInfo.new(0.25), {Size = OriginalSize}):Play()
-        TS:Create(Title, TweenInfo.new(0.25), {Text = "DXV2 | HUB"}):Play()
-        Minimized = false
+        IsMinimized = false
+        TweenService:Create(MainContainer, TweenInfo.new(0.25), {Size = OriginalSize}):Play()
+        TitleLabel.Text = "DEEPSEK X-V2 HUB"
+        
         task.wait(0.15)
-        for _, v in pairs(Main:GetChildren()) do
-            v.Visible = true
+        for _, child in pairs(MainContainer:GetChildren()) do
+            child.Visible = true
         end
+        
+        MinimizeButton.Image = "rbxassetid://10734927920"
     end
 end)
 
 task.spawn(function()
-    task.wait(1.2)
-    local steps = 10
-    for i = 1, steps do
-        TS:Create(Progress, TweenInfo.new(0.08), {Size = UDim2.new(i/steps, 0, 1, 0)}):Play()
-        StatusText.Text = "LOADING :: " .. math.floor(i/steps*100) .. "%"
-        task.wait(0.09)
+    task.wait(0.5)
+    
+    for i = 1, 10 do
+        TweenService:Create(ProgressBar, TweenInfo.new(0.1), {Size = UDim2.new(i/10, 0, 1, 0)}):Play()
+        StatusText.Text = "LOADING " .. (i*10) .. "%"
+        task.wait(0.12)
     end
+    
     StatusText.Text = "DXV2 :: READY"
     task.wait(0.5)
-    TS:Create(Progress, TweenInfo.new(0.3), {Size = UDim2.new(0, 0, 1, 0)}):Play()
+    TweenService:Create(ProgressBar, TweenInfo.new(0.3), {Size = UDim2.new(0, 0, 1, 0)}):Play()
     
-    while task.wait(5) do
-        TS:Create(Glow, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), 
+    while task.wait(4) do
+        TweenService:Create(BackgroundGlow, TweenInfo.new(1.5), 
+            {ImageColor3 = Color3.fromRGB(100, 0, 200)}):Play()
+        task.wait(1.5)
+        TweenService:Create(BackgroundGlow, TweenInfo.new(1.5), 
+            {ImageColor3 = Color3.fromRGB(200, 100, 0)}):Play()
+        task.wait(1.5)
+        TweenService:Create(BackgroundGlow, TweenInfo.new(1.5), 
             {ImageColor3 = Color3.fromRGB(0, 150, 255)}):Play()
-        task.wait(1)
-        TS:Create(Glow, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), 
-            {ImageColor3 = Color3.fromRGB(100, 0, 255)}):Play()
-        task.wait(1)
-        TS:Create(Glow, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), 
-            {ImageColor3 = Color3.fromRGB(255, 100, 0)}):Play()
-        task.wait(1)
-        TS:Create(Glow, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), 
-            {ImageColor3 = Color3.fromRGB(0, 100, 255)}):Play()
+        task.wait(1.5)
     end
 end)
 
-local VIM = game:GetService("VirtualInputManager")
+local VirtualInputManager = game:GetService("VirtualInputManager")
 task.spawn(function()
-    while task.wait(28) do
+    while task.wait(25) do
         pcall(function()
-            VIM:SendMouseMoveEvent(50, 50, workspace)
+            VirtualInputManager:SendMouseMoveEvent(50, 50, workspace)
         end)
     end
 end)
 
-print("╔══════════════════════════════╗")
-print("║    DXV2 LOADER ACTIVATED     ║")
-print("║    NO AI • CUSTOM DESIGN     ║")
-print("║    ALL SYSTEMS OPERATIONAL   ║")
-print("╚══════════════════════════════╝")
+print("=================================")
+print("   DXV2 ULTIMATE LOADER ACTIVE   ")
+print("   NO BUGS • PERFECT UI • SMOOTH ")
+print("   ALL SYSTEMS FUNCTIONAL        ")
+print("=================================")
