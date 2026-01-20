@@ -1,281 +1,482 @@
+-- GUI Loader Kustom oleh DEEPSEK X-V2
+-- Tanpa Rayfield, tanpa batasan
+
+if game:GetService("CoreGui"):FindFirstChild("DEEPSEK_LOADER") then
+    game:GetService("CoreGui"):FindFirstChild("DEEPSEK_LOADER"):Destroy()
+end
+
+-- Services
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-local UserInput = game:GetService("UserInputService")
-local CoreGui = game:GetService("CoreGui")
+local LocalPlayer = Players.LocalPlayer
 
--- Hapus UI lama jika ada
-if CoreGui:FindFirstChild("RealChatUI") then
-    CoreGui:FindFirstChild("RealChatUI"):Destroy()
+-- Main Container
+local DEEPSEK_LOADER = Instance.new("ScreenGui")
+DEEPSEK_LOADER.Name = "DEEPSEK_LOADER"
+DEEPSEK_LOADER.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+DEEPSEK_LOADER.ResetOnSpawn = false
+DEEPSEK_LOADER.Parent = game:GetService("CoreGui")
+
+-- Main Frame
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 500, 0, 400)
+MainFrame.Position = UDim2.new(0.5, -250, 0.5, -200)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 25)
+MainFrame.BorderSizePixel = 0
+MainFrame.ClipsDescendants = true
+MainFrame.Parent = DEEPSEK_LOADER
+
+-- Corner
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 12)
+UICorner.Parent = MainFrame
+
+-- Shadow
+local Shadow = Instance.new("ImageLabel")
+Shadow.Name = "Shadow"
+Shadow.Size = UDim2.new(1, 20, 1, 20)
+Shadow.Position = UDim2.new(0, -10, 0, -10)
+Shadow.BackgroundTransparency = 1
+Shadow.Image = "rbxassetid://1316045217"
+Shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+Shadow.ImageTransparency = 0.8
+Shadow.ScaleType = Enum.ScaleType.Slice
+Shadow.SliceCenter = Rect.new(10, 10, 118, 118)
+Shadow.Parent = MainFrame
+
+-- Top Bar
+local TopBar = Instance.new("Frame")
+TopBar.Name = "TopBar"
+TopBar.Size = UDim2.new(1, 0, 0, 40)
+TopBar.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+TopBar.BorderSizePixel = 0
+TopBar.Parent = MainFrame
+
+local TopBarCorner = Instance.new("UICorner")
+TopBarCorner.CornerRadius = UDim.new(0, 12)
+TopBarCorner.Parent = TopBar
+
+-- Title
+local Title = Instance.new("TextLabel")
+Title.Name = "Title"
+Title.Size = UDim2.new(0, 200, 1, 0)
+Title.Position = UDim2.new(0, 15, 0, 0)
+Title.BackgroundTransparency = 1
+Title.Text = "DEEPSEK X-V2 LOADER"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 18
+Title.Font = Enum.Font.GothamBold
+Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Parent = TopBar
+
+-- Subtitle
+local SubTitle = Instance.new("TextLabel")
+SubTitle.Name = "SubTitle"
+SubTitle.Size = UDim2.new(0, 200, 0, 20)
+SubTitle.Position = UDim2.new(0, 15, 0, 35)
+SubTitle.BackgroundTransparency = 1
+SubTitle.Text = "Universal Script Hub | Unlocked"
+SubTitle.TextColor3 = Color3.fromRGB(200, 200, 200)
+SubTitle.TextSize = 14
+SubTitle.Font = Enum.Font.Gotham
+SubTitle.TextXAlignment = Enum.TextXAlignment.Left
+SubTitle.Parent = MainFrame
+
+-- Close Button
+local CloseButton = Instance.new("TextButton")
+CloseButton.Name = "CloseButton"
+CloseButton.Size = UDim2.new(0, 30, 0, 30)
+CloseButton.Position = UDim2.new(1, -40, 0, 5)
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+CloseButton.BorderSizePixel = 0
+CloseButton.Text = "X"
+CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseButton.TextSize = 16
+CloseButton.Font = Enum.Font.GothamBold
+CloseButton.Parent = TopBar
+
+local CloseCorner = Instance.new("UICorner")
+CloseCorner.CornerRadius = UDim.new(0, 6)
+CloseCorner.Parent = CloseButton
+
+-- Minimize Button
+local MinimizeButton = Instance.new("TextButton")
+MinimizeButton.Name = "MinimizeButton"
+MinimizeButton.Size = UDim2.new(0, 30, 0, 30)
+MinimizeButton.Position = UDim2.new(1, -75, 0, 5)
+MinimizeButton.BackgroundColor3 = Color3.fromRGB(255, 180, 0)
+MinimizeButton.BorderSizePixel = 0
+MinimizeButton.Text = "_"
+MinimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+MinimizeButton.TextSize = 16
+MinimizeButton.Font = Enum.Font.GothamBold
+MinimizeButton.Parent = TopBar
+
+local MinimizeCorner = Instance.new("UICorner")
+MinimizeCorner.CornerRadius = UDim.new(0, 6)
+MinimizeCorner.Parent = MinimizeButton
+
+-- Tabs Container
+local TabsContainer = Instance.new("Frame")
+TabsContainer.Name = "TabsContainer"
+TabsContainer.Size = UDim2.new(0, 150, 0, 300)
+TabsContainer.Position = UDim2.new(0, 10, 0, 80)
+TabsContainer.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+TabsContainer.BorderSizePixel = 0
+TabsContainer.Parent = MainFrame
+
+local TabsCorner = Instance.new("UICorner")
+TabsCorner.CornerRadius = UDim.new(0, 8)
+TabsCorner.Parent = TabsContainer
+
+-- Content Container
+local ContentContainer = Instance.new("Frame")
+ContentContainer.Name = "ContentContainer"
+ContentContainer.Size = UDim2.new(0, 320, 0, 300)
+ContentContainer.Position = UDim2.new(0, 170, 0, 80)
+ContentContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+ContentContainer.BorderSizePixel = 0
+ContentContainer.ClipsDescendants = true
+ContentContainer.Parent = MainFrame
+
+local ContentCorner = Instance.new("UICorner")
+ContentCorner.CornerRadius = UDim.new(0, 8)
+ContentCorner.Parent = ContentContainer
+
+-- Loading Bar Container
+local LoadingContainer = Instance.new("Frame")
+LoadingContainer.Name = "LoadingContainer"
+LoadingContainer.Size = UDim2.new(1, -40, 0, 20)
+LoadingContainer.Position = UDim2.new(0, 20, 1, -40)
+LoadingContainer.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+LoadingContainer.BorderSizePixel = 0
+LoadingContainer.Parent = MainFrame
+
+local LoadingCorner = Instance.new("UICorner")
+LoadingCorner.CornerRadius = UDim.new(0, 10)
+LoadingCorner.Parent = LoadingContainer
+
+-- Loading Bar
+local LoadingBar = Instance.new("Frame")
+LoadingBar.Name = "LoadingBar"
+LoadingBar.Size = UDim2.new(0, 0, 1, 0)
+LoadingBar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+LoadingBar.BorderSizePixel = 0
+LoadingBar.Parent = LoadingContainer
+
+local LoadingBarCorner = Instance.new("UICorner")
+LoadingBarCorner.CornerRadius = UDim.new(0, 10)
+LoadingBarCorner.Parent = LoadingBar
+
+-- Loading Text
+local LoadingText = Instance.new("TextLabel")
+LoadingText.Name = "LoadingText"
+LoadingText.Size = UDim2.new(1, 0, 0, 20)
+LoadingText.Position = UDim2.new(0, 0, 1, -60)
+LoadingText.BackgroundTransparency = 1
+LoadingText.Text = "Initializing DEEPSEK X-V2..."
+LoadingText.TextColor3 = Color3.fromRGB(200, 200, 200)
+LoadingText.TextSize = 14
+LoadingText.Font = Enum.Font.Gotham
+LoadingText.Parent = MainFrame
+
+-- Tab Buttons Data
+local tabs = {
+    {Name = "Universal", Icon = "⚡"},
+    {Name = "Games", Icon = "🎮"},
+    {Name = "Salon", Icon = "💇"},
+    {Name = "Fish", Icon = "🎣"},
+    {Name = "Settings", Icon = "⚙️"}
+}
+
+-- Current Tab
+local currentTab = "Universal"
+
+-- Scripts Data
+local scriptsData = {
+    Universal = {
+        {Name = "Fly Gui", Script = "loadstring(game:HttpGet('https://rawscripts.net/raw/Universal-Script-Fly-v3-64434'))()"},
+        {Name = "Bring Part", Script = "loadstring(game:HttpGet('https://rawscripts.net/raw/Universal-Script-Bring-Parts-27586'))()"},
+        {Name = "Emote FE", Script = "loadstring(game:HttpGet('https://raw.githubusercontent.com/7yd7/Hub/refs/heads/Branch/GUIS/Emotes.lua'))()"},
+        {Name = "Sky Destroyer", Script = "loadstring(game:HttpGet('https://raw.githubusercontent.com/AlrecTofficial67/ItsAlrecT67/refs/heads/main/Sky%20destroyerV2_update_ambatukam'))()"},
+        {Name = "Tp Tool", Script = "loadstring(game:HttpGet('https://rawscripts.net/raw/Universal-Script-TpTool-Teleport-Tool-47255'))()"},
+        {Name = "RemoveVoid", Script = "loadstring(game:HttpGet('https://rawscripts.net/raw/Universal-Script-remove-void-no-void-63824'))()"},
+        {Name = "Infinite Yield", Script = "loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()"},
+        {Name = "Kill all(need sword)", Script = "loadstring(game:HttpGet('https://raw.githubusercontent.com/Markklol/Script/refs/heads/main/Sword%20Script'))()"},
+        {Name = "TelekinesisToo", Script = "loadstring(game:HttpGet('https://rawscripts.net/raw/Universal-Script-Fe-Telekinesis-V5-21542'))()"}
+    },
+    Games = {
+        {Name = "Brookhaven - Coquette Hub", Script = "loadstring(game:HttpGet('https://rawscripts.net/raw/Brookhaven-RP-Coquette-Hub-41921'))()"},
+        {Name = "Brookhaven - Nytherune Hub", Script = "loadstring(game:HttpGet('https://rawscripts.net/raw/Brookhaven-RP-Nytherune-Hub-43881'))()"},
+        {Name = "Brookhaven - LOL gui V1", Script = "loadstring(game:HttpGet('https://rawscripts.net/raw/Brookhaven-RP-LOL-gui-v1-80287'))()"},
+        {Name = "Brookhaven - Lcc Hub", Script = "loadstring(game:HttpGet('https://rawscripts.net/raw/Brookhaven-RP-Lcc-hub-63252'))()"},
+        {Name = "Brookhaven - Sp Hub", Script = "loadstring(game:HttpGet('https://rawscripts.net/raw/Brookhaven-RP-SP-Hub-v1o5-New-Uptade-49601'))()"},
+        {Name = "Brookhaven - Lyra Hub", Script = "loadstring(game:HttpGet('https://rawscripts.net/raw/Brookhaven-RP-Lyra-hub-OFICIAL-54335'))()"},
+        {Name = "Brookhaven - PRRI Hub", Script = "loadstring(game:HttpGet('https://raw.githubusercontent.com/AlrecTofficial67/ItsAlrecT67/refs/heads/main/PRRI_V12_UPDATE_INDONESIA_BYalrecT.txt'))()"},
+        {Name = "Brookhaven - Chachado Hub", Script = "loadstring(game:HttpGet('https://github.com/contateste8/OaOaOaOa-EbEbEbEb/raw/refs/heads/main/ChachadoHubObf.txt'))()"}
+    },
+    Salon = {
+        {Name = "Salon - SIEXTHER", Script = "loadstring(game:HttpGet('https://raw.githubusercontent.com/KNTLX69/SXTHR666/refs/heads/main/SIEXTHER-HYTAMKAN'))()"},
+        {Name = "Salon - PHSHub", Script = "loadstring(game:HttpGet('https://raw.githubusercontent.com/AlrecTofficial67/FinzuFile_xploTer/refs/heads/main/Laser_H4M4SALON_TEAMPHScommunity.txt'))()"}
+    },
+    Fish = {
+        {Name = "Fish It - ChloeX", Script = "loadstring(game:HttpGet('https://raw.githubusercontent.com/MajestySkie/Chloe-X/main/Main/ChloeX'))()"},
+        {Name = "Fish It - LynX", Script = "loadstring(game:HttpGet('https://raw.githubusercontent.com/4LynxX/Lynx/refs/heads/main/LynxxMain.lua'))()"}
+    },
+    Settings = {
+        {Name = "Hide GUI", Script = "game:GetService('CoreGui'):FindFirstChild('DEEPSEK_LOADER').Enabled = false"},
+        {Name = "Show GUI", Script = "game:GetService('CoreGui'):FindFirstChild('DEEPSEK_LOADER').Enabled = true"},
+        {Name = "Destroy GUI", Script = "game:GetService('CoreGui'):FindFirstChild('DEEPSEK_LOADER'):Destroy()"},
+        {Name = "Rejoin Server", Script = "game:GetService('TeleportService'):Teleport(game.PlaceId)"}
+    }
+}
+
+-- Tab Buttons Storage
+local tabButtons = {}
+
+-- Create Tab Buttons
+for i, tab in ipairs(tabs) do
+    local TabButton = Instance.new("TextButton")
+    TabButton.Name = tab.Name .. "Tab"
+    TabButton.Size = UDim2.new(1, -20, 0, 40)
+    TabButton.Position = UDim2.new(0, 10, 0, 10 + (i-1) * 45)
+    TabButton.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+    TabButton.BorderSizePixel = 0
+    TabButton.Text = tab.Icon .. "  " .. tab.Name
+    TabButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+    TabButton.TextSize = 14
+    TabButton.Font = Enum.Font.Gotham
+    TabButton.Parent = TabsContainer
+    
+    local TabCorner = Instance.new("UICorner")
+    TabCorner.CornerRadius = UDim.new(0, 6)
+    TabCorner.Parent = TabButton
+    
+    -- Hover effect
+    TabButton.MouseEnter:Connect(function()
+        if currentTab ~= tab.Name then
+            TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(45, 45, 55)}):Play()
+        end
+    end)
+    
+    TabButton.MouseLeave:Connect(function()
+        if currentTab ~= tab.Name then
+            TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(35, 35, 45)}):Play()
+        end
+    end)
+    
+    TabButton.MouseButton1Click:Connect(function()
+        currentTab = tab.Name
+        updateContent()
+        
+        -- Update all tab buttons
+        for _, btn in pairs(tabButtons) do
+            if btn.Name == tab.Name .. "Tab" then
+                TweenService:Create(btn, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(0, 120, 215)}):Play()
+                TweenService:Create(btn, TweenInfo.new(0.3), {TextColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+            else
+                TweenService:Create(btn, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(35, 35, 45)}):Play()
+                TweenService:Create(btn, TweenInfo.new(0.3), {TextColor3 = Color3.fromRGB(200, 200, 200)}):Play()
+            end
+        end
+    end)
+    
+    tabButtons[tab.Name] = TabButton
 end
 
--- =======================
--- BUAT UI
--- =======================
-
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "RealChatUI"
-screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-screenGui.Parent = CoreGui
-
--- Tombol toggle (selalu terlihat)
-local toggleButton = Instance.new("TextButton")
-toggleButton.Name = "ToggleButton"
-toggleButton.Size = UDim2.new(0, 60, 0, 60)
-toggleButton.Position = UDim2.new(0.94, 0, 0.87, 0)
-toggleButton.BackgroundColor3 = Color3.fromRGB(0, 100, 255)
-toggleButton.Text = "💬"
-toggleButton.TextColor3 = Color3.white
-toggleButton.TextSize = 28
-toggleButton.Font = Enum.Font.SourceSansBold
-toggleButton.Parent = screenGui
-
--- Window chat (awalnya tersembunyi)
-local chatWindow = Instance.new("Frame")
-chatWindow.Name = "ChatWindow"
-chatWindow.Size = UDim2.new(0.35, 0, 0.5, 0)
-chatWindow.Position = UDim2.new(0.6, 0, 0.25, 0)
-chatWindow.BackgroundColor3 = Color3.fromRGB(30, 35, 45)
-chatWindow.BorderSizePixel = 0
-chatWindow.Visible = false
-chatWindow.Parent = screenGui
-
--- Header window
-local header = Instance.new("Frame")
-header.Size = UDim2.new(1, 0, 0.08, 0)
-header.BackgroundColor3 = Color3.fromRGB(0, 80, 200)
-header.Parent = chatWindow
-
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(0.7, 0, 1, 0)
-title.BackgroundTransparency = 1
-title.Text = "EXECUTOR CHAT"
-title.TextColor3 = Color3.white
-title.Font = Enum.Font.SourceSansBold
-title.TextSize = 16
-title.Parent = header
-
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0.3, 0, 1, 0)
-closeButton.Position = UDim2.new(0.7, 0, 0, 0)
-closeButton.Text = "CLOSE"
-closeButton.TextColor3 = Color3.white
-closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-closeButton.Font = Enum.Font.SourceSansBold
-closeButton.Parent = header
-
--- Area pesan
-local messagesFrame = Instance.new("ScrollingFrame")
-messagesFrame.Size = UDim2.new(1, 0, 0.77, 0)
-messagesFrame.Position = UDim2.new(0, 0, 0.08, 0)
-messagesFrame.BackgroundColor3 = Color3.fromRGB(20, 25, 35)
-messagesFrame.ScrollBarThickness = 6
-messagesFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-messagesFrame.Parent = chatWindow
-
-local messagesLayout = Instance.new("UIListLayout")
-messagesLayout.Padding = UDim.new(0, 10)
-messagesLayout.Parent = messagesFrame
-
-local messagesPadding = Instance.new("UIPadding")
-messagesPadding.PaddingLeft = UDim.new(0, 10)
-messagesPadding.PaddingRight = UDim.new(0, 10)
-messagesPadding.PaddingTop = UDim.new(0, 10)
-messagesPadding.Parent = messagesFrame
-
--- Area input
-local inputFrame = Instance.new("Frame")
-inputFrame.Size = UDim2.new(1, 0, 0.15, 0)
-inputFrame.Position = UDim2.new(0, 0, 0.85, 0)
-inputFrame.BackgroundColor3 = Color3.fromRGB(40, 45, 55)
-inputFrame.Parent = chatWindow
-
-local inputBox = Instance.new("TextBox")
-inputBox.Size = UDim2.new(0.7, 0, 0.7, 0)
-inputBox.Position = UDim2.new(0.02, 0, 0.15, 0)
-inputBox.BackgroundColor3 = Color3.fromRGB(50, 55, 65)
-inputBox.BorderSizePixel = 0
-inputBox.TextColor3 = Color3.white
-inputBox.Font = Enum.Font.SourceSans
-inputBox.PlaceholderText = "Type your message here..."
-inputBox.TextSize = 14
-inputBox.Parent = inputFrame
-
-local sendButton = Instance.new("TextButton")
-sendButton.Size = UDim2.new(0.25, 0, 0.7, 0)
-sendButton.Position = UDim2.new(0.73, 0, 0.15, 0)
-sendButton.Text = "SEND"
-sendButton.TextColor3 = Color3.white
-sendButton.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
-sendButton.Font = Enum.Font.SourceSansBold
-sendButton.Parent = inputFrame
-
--- =======================
--- VARIABEL & FUNGSI
--- =======================
-
-local chatMessages = {}
-local messageCount = 0
-
--- Fungsi tambah pesan
-function addMessage(senderName, messageText, isSystemMessage)
-    messageCount = messageCount + 1
-    
-    -- Buat frame pesan
-    local messageFrame = Instance.new("Frame")
-    messageFrame.Name = "Message" .. messageCount
-    messageFrame.Size = UDim2.new(1, -20, 0, 0)
-    messageFrame.BackgroundTransparency = 1
-    messageFrame.AutomaticSize = Enum.AutomaticSize.Y
-    
-    -- Label pengirim
-    local senderLabel = Instance.new("TextLabel")
-    senderLabel.Size = UDim2.new(1, 0, 0, 20)
-    senderLabel.BackgroundTransparency = 1
-    senderLabel.Text = isSystemMessage and "[SYSTEM] " .. senderName or "[" .. senderName .. "]"
-    senderLabel.TextColor3 = isSystemMessage and Color3.fromRGB(255, 100, 100) or Color3.fromRGB(100, 200, 255)
-    senderLabel.Font = Enum.Font.SourceSansBold
-    senderLabel.TextSize = 14
-    senderLabel.TextXAlignment = Enum.TextXAlignment.Left
-    senderLabel.Parent = messageFrame
-    
-    -- Label pesan
-    local textLabel = Instance.new("TextLabel")
-    textLabel.Size = UDim2.new(1, 0, 0, 0)
-    textLabel.Position = UDim2.new(0, 0, 0, 20)
-    textLabel.BackgroundTransparency = 1
-    textLabel.Text = messageText
-    textLabel.TextColor3 = Color3.white
-    textLabel.Font = Enum.Font.SourceSans
-    textLabel.TextSize = 14
-    textLabel.TextWrapped = true
-    textLabel.AutomaticSize = Enum.AutomaticSize.Y
-    textLabel.TextXAlignment = Enum.TextXAlignment.Left
-    textLabel.Parent = messageFrame
-    
-    -- Tambah ke frame
-    messageFrame.Parent = messagesFrame
-    
-    -- Scroll ke bawah
-    wait(0.05)
-    messagesFrame.CanvasPosition = Vector2.new(0, messagesFrame.AbsoluteCanvasSize.Y)
-    
-    -- Simpan pesan
-    table.insert(chatMessages, {
-        sender = senderName,
-        message = messageText,
-        time = os.time()
-    })
-    
-    -- Print ke console
-    print("[Executor Chat] " .. senderName .. ": " .. messageText)
-end
-
--- Fungsi kirim pesan
-function sendMessage()
-    local text = string.gsub(inputBox.Text, "^%s*(.-)%s*$", "%1")
-    
-    if text ~= "" and text ~= " " then
-        addMessage(player.Name, text, false)
-        inputBox.Text = ""
-        inputBox:CaptureFocus()
-    end
-end
-
--- =======================
--- EVENT HANDLERS
--- =======================
-
--- Toggle window
-toggleButton.MouseButton1Click:Connect(function()
-    chatWindow.Visible = not chatWindow.Visible
-    if chatWindow.Visible then
-        inputBox:CaptureFocus()
-    end
-end)
-
--- Close window
-closeButton.MouseButton1Click:Connect(function()
-    chatWindow.Visible = false
-end)
-
--- Kirim pesan saat tombol send
-sendButton.MouseButton1Click:Connect(function()
-    sendMessage()
-end)
-
--- Kirim pesan saat enter
-inputBox.FocusLost:Connect(function(enterPressed)
-    if enterPressed then
-        sendMessage()
-    end
-end)
-
--- Hotkey F9
-UserInput.InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.F9 then
-        chatWindow.Visible = not chatWindow.Visible
-        if chatWindow.Visible then
-            inputBox:CaptureFocus()
+-- Update Content Function
+function updateContent()
+    -- Clear content
+    for _, child in ipairs(ContentContainer:GetChildren()) do
+        if child:IsA("Frame") then
+            child:Destroy()
         end
     end
-end)
+    
+    -- Get current scripts
+    local scripts = scriptsData[currentTab] or {}
+    
+    -- Create scroll container
+    local ScrollingFrame = Instance.new("ScrollingFrame")
+    ScrollingFrame.Name = "ScrollingFrame"
+    ScrollingFrame.Size = UDim2.new(1, 0, 1, 0)
+    ScrollingFrame.BackgroundTransparency = 1
+    ScrollingFrame.BorderSizePixel = 0
+    ScrollingFrame.ScrollBarThickness = 6
+    ScrollingFrame.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 120)
+    ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, #scripts * 50)
+    ScrollingFrame.Parent = ContentContainer
+    
+    -- Create script buttons
+    for i, scriptData in ipairs(scripts) do
+        local ScriptButton = Instance.new("TextButton")
+        ScriptButton.Name = "Script_" .. i
+        ScriptButton.Size = UDim2.new(1, -20, 0, 40)
+        ScriptButton.Position = UDim2.new(0, 10, 0, 10 + (i-1) * 50)
+        ScriptButton.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+        ScriptButton.BorderSizePixel = 0
+        ScriptButton.Text = scriptData.Name
+        ScriptButton.TextColor3 = Color3.fromRGB(220, 220, 220)
+        ScriptButton.TextSize = 14
+        ScriptButton.Font = Enum.Font.Gotham
+        ScriptButton.TextWrapped = true
+        ScriptButton.Parent = ScrollingFrame
+        
+        local ScriptCorner = Instance.new("UICorner")
+        ScriptCorner.CornerRadius = UDim.new(0, 6)
+        ScriptCorner.Parent = ScriptButton
+        
+        -- Execute script
+        ScriptButton.MouseButton1Click:Connect(function()
+            LoadingText.Text = "Executing: " .. scriptData.Name
+            TweenService:Create(LoadingBar, TweenInfo.new(0.5), {Size = UDim2.new(0.5, 0, 1, 0)}):Play()
+            
+            task.wait(0.5)
+            
+            -- Execute the script
+            local success, errorMsg = pcall(function()
+                loadstring(scriptData.Script)()
+            end)
+            
+            if success then
+                LoadingText.Text = "✓ Success: " .. scriptData.Name
+                TweenService:Create(LoadingBar, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(0, 255, 100)}):Play()
+            else
+                LoadingText.Text = "✗ Error: " .. scriptData.Name
+                TweenService:Create(LoadingBar, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(255, 50, 50)}):Play()
+            end
+            
+            TweenService:Create(LoadingBar, TweenInfo.new(0.5), {Size = UDim2.new(1, 0, 1, 0)}):Play()
+            
+            task.wait(1)
+            
+            TweenService:Create(LoadingBar, TweenInfo.new(0.5), {Size = UDim2.new(0, 0, 1, 0)}):Play()
+            TweenService:Create(LoadingBar, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(0, 170, 255)}):Play()
+            LoadingText.Text = "Ready"
+        end)
+        
+        -- Hover effects
+        ScriptButton.MouseEnter:Connect(function()
+            TweenService:Create(ScriptButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(50, 50, 65)}):Play()
+        end)
+        
+        ScriptButton.MouseLeave:Connect(function()
+            TweenService:Create(ScriptButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(40, 40, 50)}):Play()
+        end)
+    end
+    
+    -- Update canvas size
+    ScrollingFrame.CanvasSize = UDim2.new(0, 0, 0, #scripts * 50)
+end
 
--- =======================
--- INISIALISASI
--- =======================
+-- Initialize first tab
+tabButtons["Universal"].BackgroundColor3 = Color3.fromRGB(0, 120, 215)
+tabButtons["Universal"].TextColor3 = Color3.fromRGB(255, 255, 255)
+updateContent()
 
--- Pesan sistem awal
-addMessage("SYSTEM", "Executor Chat System Loaded", true)
-addMessage("SYSTEM", "This is a separate chat from Roblox", true)
-addMessage("SYSTEM", "Press F9 or click 💬 button", true)
-addMessage("SYSTEM", "Type your message below", true)
+-- Dragging functionality
+local dragging = false
+local dragInput, dragStart, startPos
 
--- Test message
-addMessage("BOT", "Chat system is working!", false)
+local function update(input)
+    local delta = input.Position - dragStart
+    MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
 
--- =======================
--- FUNGSI TAMBAHAN
--- =======================
-
--- Buat window bisa di-drag
-local isDragging = false
-local dragStartPosition, windowStartPosition
-
-header.InputBegan:Connect(function(input)
+TopBar.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        isDragging = true
-        dragStartPosition = input.Position
-        windowStartPosition = chatWindow.Position
+        dragging = true
+        dragStart = input.Position
+        startPos = MainFrame.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
     end
 end)
 
-header.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        isDragging = false
+TopBar.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
     end
 end)
 
-UserInput.InputChanged:Connect(function(input)
-    if isDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-        local delta = input.Position - dragStartPosition
-        chatWindow.Position = UDim2.new(
-            windowStartPosition.X.Scale,
-            windowStartPosition.X.Offset + delta.X,
-            windowStartPosition.Y.Scale,
-            windowStartPosition.Y.Offset + delta.Y
-        )
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and input == dragInput then
+        update(input)
     end
 end)
 
--- =======================
--- OUTPUT KONFIRMASI
--- =======================
-print("========================================")
-print("✅ EXECUTOR CHAT SYSTEM LOADED")
-print("✅ Press F9 or click 💬 button")
-print("✅ Chat is separate from Roblox chat")
-print("========================================")
+-- Close button
+CloseButton.MouseButton1Click:Connect(function()
+    TweenService:Create(MainFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 0, 0, 0)}):Play()
+    TweenService:Create(MainFrame, TweenInfo.new(0.3), {Position = UDim2.new(0.5, 0, 0.5, 0)}):Play()
+    task.wait(0.3)
+    DEEPSEK_LOADER:Destroy()
+end)
 
--- Auto test
-wait(1)
-addMessage("SYSTEM", "Chat system is ready to use!", true)
+-- Minimize button
+local minimized = false
+local originalSize = MainFrame.Size
+local originalPosition = MainFrame.Position
+
+MinimizeButton.MouseButton1Click:Connect(function()
+    if not minimized then
+        TweenService:Create(MainFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 500, 0, 40)}):Play()
+        minimized = true
+    else
+        TweenService:Create(MainFrame, TweenInfo.new(0.3), {Size = originalSize}):Play()
+        minimized = false
+    end
+end)
+
+-- Animate loading
+coroutine.wrap(function()
+    task.wait(1)
+    TweenService:Create(LoadingBar, TweenInfo.new(1.5), {Size = UDim2.new(1, 0, 1, 0)}):Play()
+    LoadingText.Text = "DEEPSEK X-V2 Loaded Successfully"
+    
+    task.wait(1)
+    
+    TweenService:Create(LoadingBar, TweenInfo.new(0.5), {Size = UDim2.new(0, 0, 1, 0)}):Play()
+    LoadingText.Text = "Ready - Select a script"
+    
+    -- Pulse animation for active tab
+    while task.wait(2) do
+        TweenService:Create(tabButtons[currentTab], TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), 
+            {BackgroundColor3 = Color3.fromRGB(0, 150, 255)}):Play()
+        task.wait(0.5)
+        TweenService:Create(tabButtons[currentTab], TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), 
+            {BackgroundColor3 = Color3.fromRGB(0, 120, 215)}):Play()
+    end
+end)()
+
+-- Key system (optional toggle)
+local KeySystemEnabled = false
+if KeySystemEnabled then
+    local key = "DEEPSEK-XV2-2025"
+    local input = ""
+    
+    -- Create key input UI here if needed
+else
+    LoadingText.Text = "Key System: DISABLED - Full Access"
+end
+
+-- Anti-AFK
+local VirtualInputManager = game:GetService("VirtualInputManager")
+coroutine.wrap(function()
+    while task.wait(30) do
+        pcall(function()
+            VirtualInputManager:SendMouseMoveEvent(100, 100, game:GetService("Workspace"))
+        end)
+    end
+end)()
+
+print("DEEPSEK X-V2 Loader initialized successfully")
+print("GUI created without Rayfield dependency")
+print("All systems operational")
